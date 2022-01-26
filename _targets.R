@@ -54,7 +54,7 @@ t_files <- list(
              pattern = map(syst_xlsx, syst_years, syst_rows_skip)),
   tar_target(syst_prac, load_syst(syst_xlsx, syst_years, syst_rows_skip, sheet = 2),
              pattern = map(syst_xlsx, syst_years, syst_rows_skip)),
-  tar_target(syst   _all,
+  tar_target(syst_all,
              bind_rows(syst_sluz |> mutate(typ = "sluz"),
                        syst_prac |> mutate(typ = "prac")) |>
                mutate(uo = !is.na(kap)) |>
@@ -62,4 +62,4 @@ t_files <- list(
                relocate(year, typ, kap, nazev, uo, celkem))
   )
 
-rdddsdzxl   list(t_files)
+list(t_files)
