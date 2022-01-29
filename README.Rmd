@@ -31,7 +31,7 @@ The code downloads, loads and processes the published excel files such that
 
 See https://www.mvcr.cz/sluzba/clanek/systemizace-sluzebnich-a-pracovnich-mist.aspx
 
-Data currently available from `r min(syst_all$year)` to `r max(syst_all$year)`.
+Data currently available from `r min(syst_all$rok)` to `r max(syst_all$rok)`.
 
 For more info on data on public servant see [recent report](https://idea.cerge-ei.cz/zpravy/statni-zamestnanci-a-urednici-kde-pracuji-a-za-kolik) and [related repo](https://github.com/dan-bart/urednici_2021), plus an [older overview of available sources](https://petrbouchal.xyz/urednici/).
 

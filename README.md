@@ -21,7 +21,7 @@ that
 See
 <https://www.mvcr.cz/sluzba/clanek/systemizace-sluzebnich-a-pracovnich-mist.aspx>
 
-Data currently available from 2019 to 2022.
+Data currently available from 2018 to 2022.
 
 For more info on data on public servant see [recent
 report](https://idea.cerge-ei.cz/zpravy/statni-zamestnanci-a-urednici-kde-pracuji-a-za-kolik)
@@ -37,4 +37,4 @@ renv::restore()
 targets::tar_make()
 ```
 
-Rendered 2022-01-26 23:08:27
+Rendered 2022-01-29 23:50:23
