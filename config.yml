@@ -1,8 +1,13 @@
 default:
   syst_base_url: https://www.mvcr.cz/sluzba/soubor
-  syst_years: !expr 2019:2022
-  syst_files_online: [11-29-tabulkove-prilohy.xlsx,
+  syst_years: !expr 2018:2022
+  syst_files_online: [zakladni-systemizace-tabulky-23-10-2017,
+                      11-29-tabulkove-prilohy.xlsx,
                       20191126-systematizace-vladni-tabulka-xlsx,
                       20210126-systemizace-k-01-01-2021-tabulky-xlsx,
                       20220104-systemizace-k-01-01-2022-tabulkova-priloha-xlsx]
   syst_dir: data-input/syst
+  tarify_dir: data-input/tarify
+
+  export_dir: "data-export"
+
