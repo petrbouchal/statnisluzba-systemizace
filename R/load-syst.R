@@ -34,3 +34,26 @@ load_syst <- function(path, yr, skip, sheet = 1) {
   return(x)
 
 }
+
+compile_data <- function(syst_sluz, syst_prac, kapitoly) {
+  bind_rows(syst_sluz |> mutate(vztah = "sluz"),
+            syst_prac |> mutate(vztah = "prac")) |>
+    mutate(ustredni_organ = !is.na(kapitola_kod),
+           plat_prumer = platy_celkem/pocet_celkem/12) |>
+    fill(kapitola_kod, .direction = "down") |>
+    left_join(kapitoly, by = "kapitola_kod") |>
+    relocate(rok, kapitola_kod, kapitola_zkr, organizace_nazev, ustredni_organ,
+             vztah, pocet_celkem, plat_prumer) |>
+    mutate(organizace_typ = if_else(ustredni_organ, "Centrální ministerstvo", "Mimo ministerstvo"),
+           kapitola_typ = if_else(kapitola_vladni, "Ministerstva a ÚV", "Ostatní kapitoly"))
+}
+
+lengthen_data <- function(syst_all) {
+  syst_all |>
+    pivot_longer(cols = matches("predst_|ostat_"), names_to = "trida", values_to = "pocet") |>
+    mutate(trida = str_remove(trida, "pocet_")) |>
+    separate(trida, into = c("level", "trida")) |>
+    mutate(level_nazev = if_else(level == "predst", "Představení", "Běžní zaměstnanci")) |>
+    select(-pocet_predst, -pocet_ostat, -platy_celkem, -pozad_obcanstvi, -pozad_zakazkonkurence,
+           -pocet_celkem, -plat_prumer)
+}

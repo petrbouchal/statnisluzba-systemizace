@@ -43,23 +43,31 @@ syst_urls <- paste0(c_syst_base_url, "/",
                     ".aspx")
 syst_files <- file.path(c_syst_dir, paste0("syst_", c_syst_years, ".xlsx"))
 
+
+# Load data ---------------------------------------------------------------
+
 t_files <- list(
   tar_target(t_syst_urls, syst_urls),
-  tar_target(syst_rows_skip, c(4, 4, 3, 3)),
-  tar_target(syst_years, c_syst_years),
   tar_target(t_syst_files, syst_files),
   tar_target(syst_xlsx, curl::curl_download(t_syst_urls, t_syst_files),
-             pattern = map(t_syst_urls, t_syst_files), format = "file"),
+             pattern = map(t_syst_urls, t_syst_files), format = "file")
+  )
+
+t_read <- list(
+  tar_target(syst_rows_skip, c(2, 3, 3, 3, 3)),
+  tar_target(syst_years, as.integer(c_syst_years)),
   tar_target(syst_sluz, load_syst(syst_xlsx, syst_years, syst_rows_skip, sheet = 1),
              pattern = map(syst_xlsx, syst_years, syst_rows_skip)),
   tar_target(syst_prac, load_syst(syst_xlsx, syst_years, syst_rows_skip, sheet = 2),
              pattern = map(syst_xlsx, syst_years, syst_rows_skip)),
-  tar_target(syst_all,
-             bind_rows(syst_sluz |> mutate(typ = "sluz"),
-                       syst_prac |> mutate(typ = "prac")) |>
-               mutate(uo = !is.na(kap)) |>
-               fill(kap, .direction = "down") |>
-               relocate(year, typ, kap, nazev, uo, celkem))
-  )
+  tar_file_read(kapitoly, "data-input/kapitoly.csv", read_csv(!!.x, col_types = "cccl")),
+  tar_file_read(tarify_2021,
+                # https://www.mfcr.cz/cs/o-ministerstvu/informacni-systemy/is-o-platech/
+                # https://www.mfcr.cz/assets/cs/media/Is-o-platech_2021-05-21_Tarifni-tabulky-platne-v-r-2021.xls
 
 list(t_files)
+
+t_compile <- list(
+  tar_target(syst_all, compile_data(syst_sluz, syst_prac, kapitoly)),
+  tar_target(syst_pocty_long, lengthen_data(syst_all))
+)
