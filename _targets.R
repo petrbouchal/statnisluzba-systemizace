@@ -65,9 +65,29 @@ t_read <- list(
                 # https://www.mfcr.cz/cs/o-ministerstvu/informacni-systemy/is-o-platech/
                 # https://www.mfcr.cz/assets/cs/media/Is-o-platech_2021-05-21_Tarifni-tabulky-platne-v-r-2021.xls
 
-list(t_files)
+                "data-input/tarify/Is-o-platech_2021-05-21_Tarifni-tabulky-platne-v-r-2021.xls",
+                read_xls(!!.x, sheet = 5, range = "B6:T17", col_names = FALSE) |>
+                  set_names(c("stupen", paste0("trida", "_", str_pad(1:16, 2, pad = "0")),
+                              "praxe_do_nad", "praxe_let")))
+)
 
 t_compile <- list(
   tar_target(syst_all, compile_data(syst_sluz, syst_prac, kapitoly)),
   tar_target(syst_pocty_long, lengthen_data(syst_all))
 )
+
+t_export <- list(
+  tar_file(export_all, write_data(syst_all, file.path(c_export_dir, "systemizace_all.csv"))),
+  tar_file(export_long_parquet, write_data(syst_pocty_long,
+                                   file.path(c_export_dir, "systemizace_pocty_long.parquet"),
+                                   arrow::write_parquet)),
+  tar_file(export_long_excel, write_data(syst_pocty_long,
+                                   file.path(c_export_dir, "systemizace_pocty_long.xlsx"),
+                                   writexl::write_xlsx)),
+  tar_file(export_long_csv, write_data(syst_pocty_long |> select(-kapitola_nazev, -kapitola_typ,
+                                                                   -organizace_typ, -kapitola_zkr,
+                                                                   -kapitola_vladni, -level_nazev),
+                                   file.path(c_export_dir, "systemizace_pocty_long.csv"),
+                                   write_excel_csv2))
+)
+list(t_files, t_read, t_compile, t_export)
