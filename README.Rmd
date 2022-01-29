@@ -33,9 +33,9 @@ See https://www.mvcr.cz/sluzba/clanek/systemizace-sluzebnich-a-pracovnich-mist.a
 
 Data currently available from `r min(syst_all$rok)` to `r max(syst_all$rok)`.
 
-For more info on data on public servant see [recent report](https://idea.cerge-ei.cz/zpravy/statni-zamestnanci-a-urednici-kde-pracuji-a-za-kolik) and [related repo](https://github.com/dan-bart/urednici_2021), plus an [older overview of available sources](https://petrbouchal.xyz/urednici/).
+For more info on data on public servants see [recent report](https://idea.cerge-ei.cz/zpravy/statni-zamestnanci-a-urednici-kde-pracuji-a-za-kolik) and [related repo](https://github.com/dan-bart/urednici_2021), plus an [older overview of available sources](https://petrbouchal.xyz/urednici/).
 
-Core organised as a {targets} pipeline, with packages tracked by {renv}, so can be reproduced like so:
+Code organised as a {targets} pipeline, with packages tracked by {renv}, so can be reproduced like so:
 
 ```r
 renv::restore()

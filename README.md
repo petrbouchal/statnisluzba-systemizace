@@ -23,13 +23,13 @@ See
 
 Data currently available from 2018 to 2022.
 
-For more info on data on public servant see [recent
+For more info on data on public servants see [recent
 report](https://idea.cerge-ei.cz/zpravy/statni-zamestnanci-a-urednici-kde-pracuji-a-za-kolik)
 and [related repo](https://github.com/dan-bart/urednici_2021), plus an
 [older overview of available
 sources](https://petrbouchal.xyz/urednici/).
 
-Core organised as a {targets} pipeline, with packages tracked by {renv},
+Code organised as a {targets} pipeline, with packages tracked by {renv},
 so can be reproduced like so:
 
 ``` r
@@ -37,4 +37,4 @@ renv::restore()
 targets::tar_make()
 ```
 
-Rendered 2022-01-29 23:50:23
+Rendered 2022-01-29 23:54:44
