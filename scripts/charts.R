@@ -15,16 +15,16 @@ syst_all |>
   geom_col(aes(y = pocet/1e3, fill = var)) +
   facet_wrap(~vztah)
 
-syst_all |>
-  filter(kapitola_kod != "Celkem", kapitola_vladni, ustredni_organ) |>
-  select(rok, pocet_predst, pocet_ostat, vztah, pozad_obcanstvi, kapitola_zkr) |>
-  group_by(rok, kapitola_zkr) |>
-  summarise(across(c(pocet_predst, pocet_ostat), sum, na.rm = TRUE)) |>
-  gather("var", "pocet", -rok, -kapitola_zkr) |>
-  filter(var %in% c("pocet_predst", "pocet_ostat")) |>
+syst_pocty_long |>
+  filter(kapitola_kod != "Celkem",
+         ustredni_organ,
+         kapitola_vladni) |>
+  count(rok, kapitola_zkr, level_nazev, wt = pocet) |>
   ggplot(aes(x = rok)) +
-  geom_col(aes(y = pocet, fill = var)) +
-  facet_wrap(~kapitola_zkr)
+  scale_y_number_cz(n.breaks = 6) +
+  geom_col(aes(y = n, fill = level_nazev)) +
+  # facet_wrap(~kapitola_zkr) +
+  theme_ptrr("y", multiplot = TRUE, legend.key.size = unit(10, "pt"))
 
 syst_all |>
   filter(rok == 2021,
@@ -101,7 +101,11 @@ syst_pocty_long |>
 syst_all |>
   filter(ustredni_organ, kapitola_vladni) |>
   group_by(rok, kapitola_zkr) |>
-  summarise(plat_prumer = sum(platy_celkem, na.rm = TRUE)/sum(pocet_celkem, na.rm = T)/12) |>
+  summarise(plat_prumer = sum(platy_celkem, na.rm = TRUE)/sum(pocet_celkem,
+                                                              na.rm = T)/12,
+            .groups = "drop") |>
+  mutate(kapitola_zkr = as.factor(kapitola_zkr) |>
+           fct_reorder(plat_prumer, max, .desc = TRUE)) |>
   ggplot(aes(rok, plat_prumer)) +
   geom_line() +
   geom_point() +
