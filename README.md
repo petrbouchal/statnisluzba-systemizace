@@ -37,4 +37,6 @@ renv::restore()
 targets::tar_make()
 ```
 
-Rendered 2022-01-29 23:54:44
+Tidy data ready for analysis are in `data-export`. Codebook is TBA.
+
+Rendered 2022-01-30 02:36:28

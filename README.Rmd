@@ -42,4 +42,6 @@ renv::restore()
 targets::tar_make()
 ```
 
+Tidy data ready for analysis are in `data-export`. Codebook is TBA.
+
 Rendered `r Sys.time()`
