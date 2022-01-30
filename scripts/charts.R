@@ -76,7 +76,7 @@ syst_pocty_long |>
   geom_line() +
   geom_point() +
   facet_wrap(~kapitola_zkr) +
-  scale_color_manual(name = "Úroveň řízení", values = c("darkgrey", "darkblue")) +
+  scale_color_manual(name = "Úroveň řízení", values = c("grey50", "darkblue")) +
   ptrr::theme_ptrr(multiplot = TRUE, legend.position = "top") +
   labs(title = "Průměrná platová třída",
        subtitle = "Podle systemizace.\nJen ústřední orgány ve vládních kapitolách",
@@ -92,8 +92,8 @@ syst_pocty_long |>
   mutate(kapitola_zkr = as.factor(kapitola_zkr) |> fct_reorder(trida_mean, min)) |>
   ggplot(aes(trida_mean, kapitola_zkr, colour = level_nazev)) +
   geom_point(size = 3) +
-  scale_color_manual(name = "Úroveň řízení", values = c("darkgrey", "darkblue")) +
-  ptrr::theme_ptrr("x", multiplot = TRUE, legend.position = "top") +
+  scale_color_manual(name = "Úroveň řízení", values = c("grey50", "darkblue")) +
+  ptrr::theme_ptrr("both", multiplot = FALSE, legend.position = "top") +
   labs(title = "Průměrná platová třída (2022)",
        subtitle = "Podle systemizace 2022.\nJen ústřední orgány ve vládních kapitolách",
        caption = "Plánovaný stav podle systemizace 2022")
