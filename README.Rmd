@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r, include = FALSE}
+source("_targets_packages.R")
+```
+
 ```{r, echo = FALSE}
 targets::tar_load(syst_all)
 targets::tar_load(syst_pocty_long)
@@ -20,10 +24,9 @@ targets::tar_load(orgdata_graph)
 targets::tar_load(orgdata_nodes_processed)
 targets::tar_load(orgdata_edges_processed)
 targets::tar_load(orgdata_rect)
-source("_targets_packages.R")
 ```
 
-```{r}
+```{r, include=FALSE}
 cnf <- config::get()
 nms_orig <- names(cnf)
 names(cnf) <- paste0("c_", names(cnf))
