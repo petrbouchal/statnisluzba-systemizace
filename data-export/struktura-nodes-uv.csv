@@ -1,0 +1,118 @@
+id,nazev,mista_prac,mista_sluz,predstaveny,id_ext,urad_zkratka,urad_nazev,zkratka,urad_skupina,mista_celkem,dpth,child_ftes
+11000002,Úřad vlády ČR,0,0,NA,1,ÚV ČR,Úřad vlády ČR,ÚV ČR,Ministerstva a ÚV,0,1,NA
+12003123,Odbor lidských práv a ochrany menšin,0,0,NA,240100,ÚV ČR,Úřad vlády ČR,OLP,NA,0,2,0
+12003104,Oddělení vnitřní bezpečnosti,0,0,NA,220330,ÚV ČR,Úřad vlády ČR,OVB,NA,0,2,0
+12003134,Odbor rovnosti žen a mužů,0,0,NA,240300,ÚV ČR,Úřad vlády ČR,RRP,NA,0,2,0
+12003088,Předseda vlády,0,0,NA,200000,ÚV ČR,Úřad vlády ČR,KPV,NA,0,2,0
+12012228,Ministr pro legislativu a předseda LRV,0,0,NA,300000,ÚV ČR,Úřad vlády ČR,MLRV,NA,0,2,0
+12012287,Místopředseda vlády pro digitalizaci,0,0,NA,800000,ÚV ČR,Úřad vlády ČR,MDG,NA,0,2,0
+12003153,Ministryně pro VVI,0,0,NA,500000,ÚV ČR,Úřad vlády ČR,MVVI,NA,0,2,0
+12012281,Ministr pro evropské záležitosti,0,0,NA,700000,ÚV ČR,Úřad vlády ČR,MEZ,NA,0,2,0
+12011241,Odd. Sekretariátu vedoucího ÚV ČR,0,0,NA,100040,ÚV ČR,Úřad vlády ČR,SVÚ,NA,0,2,0
+12011403,Odbor technický a provozní,0,0,NA,110800,ÚV ČR,Úřad vlády ČR,OTP,NA,0,2,0
+12012227,Sekce pro právo a ekonomiku,0,0,NA,120000,ÚV ČR,Úřad vlády ČR,SPE,NA,0,2,0
+12003084,Sekce státního tajemníka,0,0,NA,130000,ÚV ČR,Úřad vlády ČR,STA,NA,0,2,0
+12003059,Oddělení interního auditu,0,0,NA,100310,ÚV ČR,Úřad vlády ČR,OIA,NA,0,2,0
+12003052,Odbor vládní agendy,0,0,NA,100100,ÚV ČR,Úřad vlády ČR,OVA,NA,0,2,0
+12003054,"Oddělení plánu činnosti, kontroly úkolů",0,0,NA,100120,ÚV ČR,Úřad vlády ČR,OVA,NA,0,3,0
+12003053,Oddělení org. tech. zabezpečení vlády,0,0,NA,100110,ÚV ČR,Úřad vlády ČR,OVA,NA,0,3,0
+12003055,Odbor personální,0,0,NA,100200,ÚV ČR,Úřad vlády ČR,OPE,NA,0,3,0
+12003074,Odbor informatiky,0,0,NA,110400,ÚV ČR,Úřad vlády ČR,OIT,NA,0,3,0
+12003100,Odbor protidrogové politiky,0,0,NA,220100,ÚV ČR,Úřad vlády ČR,OPK,NA,0,3,0
+12003106,Sekretariát Bezpečnostní rady státu,0,0,NA,220350,ÚV ČR,Úřad vlády ČR,OOB,NA,0,3,0
+12003107,Sekce pro evropské záležitosti,0,0,NA,230000,ÚV ČR,Úřad vlády ČR,SEZ,NA,0,3,0
+12011244,Sekce Kabinetu předsedy vlády,0,0,NA,270000,ÚV ČR,Úřad vlády ČR,KPV,NA,0,3,0
+12003124,Sekretariát Rady vlády ČR pro lid. práva,0,0,NA,240110,ÚV ČR,Úřad vlády ČR,OLP,NA,0,3,0
+12003125,Kanc. Rady vlády pro zál. rom. menšiny,0,0,NA,240120,ÚV ČR,Úřad vlády ČR,KRP,NA,0,3,0
+12012172,Odd. sekr. RV pro nestátní neziskové org,0,0,NA,240130,ÚV ČR,Úřad vlády ČR,OLP,NA,0,3,0
+12003126,Sekr. Vl. výboru pro os. se zdr. post.,0,0,NA,240140,ÚV ČR,Úřad vlády ČR,VVZ,NA,0,3,0
+12003136,Oddělení průřezových agend,0,0,NA,240320,ÚV ČR,Úřad vlády ČR,RRP,NA,0,3,0
+12003135,Sekretariát Rady vlády pro rovnost,0,0,NA,240310,ÚV ČR,Úřad vlády ČR,RRP,NA,0,3,0
+12003160,Sekce pro VVI,0,0,NA,510000,ÚV ČR,Úřad vlády ČR,SVVI,NA,0,3,0
+12003172,Náměstek ministryně pro VVI,0,0,NA,520000,ÚV ČR,Úřad vlády ČR,MVVI,NA,0,3,0
+12003173,Náměstek ministryně pro VVI,0,0,NA,530000,ÚV ČR,Úřad vlády ČR,MVVI,NA,0,3,0
+12012273,Odbor Kabinetu ministryně pro VVI,0,0,NA,500100,ÚV ČR,Úřad vlády ČR,MVVI,NA,0,3,0
+12011404,Oddělení dopravy,0,0,NA,110810,ÚV ČR,Úřad vlády ČR,OTP,NA,0,3,0
+12003082,Oddělení správy nemovitostí,0,0,NA,110710,ÚV ČR,Úřad vlády ČR,OTP,NA,0,3,0
+12003080,Oddělení stravovacích služeb,0,0,NA,110620,ÚV ČR,Úřad vlády ČR,OTP,NA,0,3,0
+12003079,Oddělení provozní a majetkové,0,0,NA,110610,ÚV ČR,Úřad vlády ČR,OTP,NA,0,3,0
+12003083,Oddělení investic,0,0,NA,110720,ÚV ČR,Úřad vlády ČR,OTP,NA,0,3,0
+12003068,Odbor rozpočtu a financování,0,0,NA,110100,ÚV ČR,Úřad vlády ČR,ORF,NA,0,3,0
+12003061,Odbor právní a kontrolní,0,0,NA,100800,ÚV ČR,Úřad vlády ČR,OPR,NA,0,3,0
+12012229,Odbor Kabinetu ministra pro legislativu,0,0,NA,300100,ÚV ČR,Úřad vlády ČR,MLRV,NA,0,3,0
+12012272,Náměstek ministra pro legislativu,0,0,NA,300200,ÚV ČR,Úřad vlády ČR,MLRV,NA,0,3,0
+12003178,Sekce Legislativní rady vlády,0,0,NA,610000,ÚV ČR,Úřad vlády ČR,LRV,NA,0,3,0
+12012285,Náměstek ministra pro evr. záležitosti,0,0,NA,700200,ÚV ČR,Úřad vlády ČR,MEZ,NA,0,3,0
+12012282,Odbor Kabinetu ministra pro evr. záležit,0,0,NA,700100,ÚV ČR,Úřad vlády ČR,MEZ,NA,0,3,0
+12012286,Náměstek ministra pro evr. záležitosti,0,0,NA,700300,ÚV ČR,Úřad vlády ČR,MEZ,NA,0,3,0
+12012288,Kabinet MPŘ vlády pro digitalizaci,0,0,NA,800100,ÚV ČR,Úřad vlády ČR,MDG,NA,0,3,0
+12003120,Oddělení evropské digitální agendy,0,0,NA,230850,ÚV ČR,Úřad vlády ČR,OVP,NA,0,3,0
+12003056,Oddělení služ. a pracovněpráv. vztahů,0,0,NA,100210,ÚV ČR,Úřad vlády ČR,OPE,NA,0,4,0
+12003057,"Odd. org., platové a koordinace státní s",0,0,NA,100220,ÚV ČR,Úřad vlády ČR,OPE,NA,0,4,0
+12003058,Odd. pers. rozvoje a péče o zam.,0,0,NA,100230,ÚV ČR,Úřad vlády ČR,OPE,NA,0,4,0
+12003077,Oddělení spisové agendy,0,0,NA,110530,ÚV ČR,Úřad vlády ČR,OAS,NA,0,4,0
+12011242,Oddělení komunikačních technologií,0,0,NA,110430,ÚV ČR,Úřad vlády ČR,OIT,NA,0,4,0
+12003075,Oddělení systémové podpory,0,0,NA,110410,ÚV ČR,Úřad vlády ČR,OIT,NA,0,4,0
+12003076,Oddělení aplikací a podpory uživatelů,0,0,NA,110420,ÚV ČR,Úřad vlády ČR,OIT,NA,0,4,0
+12003102,Národní monitorovací středisko pro drogy,0,0,NA,220120,ÚV ČR,Úřad vlády ČR,OPK,NA,0,4,0
+12003101,Odd. koord. a fin. protidr. politiky,0,0,NA,220110,ÚV ČR,Úřad vlády ČR,OPK,NA,0,4,0
+12003109,Odbor koordinace evropských politik,0,0,NA,230300,ÚV ČR,Úřad vlády ČR,OKE,NA,0,4,0
+12003113,Odbor komunikace o evr. záležitostech,0,0,NA,230700,ÚV ČR,Úřad vlády ČR,OEZ,NA,0,4,0
+12011985,Odbor pro předsednictví ČR v radě EU,0,0,NA,230900,ÚV ČR,Úřad vlády ČR,OPRES,NA,0,4,0
+12011492,Odbor věcných politik EU,0,0,NA,231100,ÚV ČR,Úřad vlády ČR,OVP,NA,0,4,0
+12011493,Odbor evropské instit. a právní podpory,0,0,NA,231200,ÚV ČR,Úřad vlády ČR,OIP,NA,0,4,0
+12011245,Oddělení analýz,0,0,NA,270010,ÚV ČR,Úřad vlády ČR,POU,NA,0,4,0
+12011037,Oddělení Kanceláře předsedy vlády,0,0,NA,200110,ÚV ČR,Úřad vlády ČR,KPV,NA,0,4,0
+12003138,Oddělení činnosti RHSD,0,0,NA,260010,ÚV ČR,Úřad vlády ČR,RSD,NA,0,4,0
+12003097,Odbor protokolu a zahraničních vztahů,0,0,NA,210300,ÚV ČR,Úřad vlády ČR,OPZ,NA,0,4,0
+12003090,Odbor komunikace,0,0,NA,210100,ÚV ČR,Úřad vlády ČR,OTI,NA,0,4,0
+12011052,Odbor podpory Rady pro VVI,0,0,NA,200300,ÚV ČR,Úřad vlády ČR,RVV,NA,0,4,0
+12012277,Odbor koordinace VVI,0,0,NA,510500,ÚV ČR,Úřad vlády ČR,VVI,NA,0,4,0
+12012275,Oddělení poradců ministryně pro VVI,0,0,NA,500140,ÚV ČR,Úřad vlády ČR,MVVI,NA,0,4,0
+12012274,Oddělení sekretariátu ministryně pro VVI,0,0,NA,500110,ÚV ČR,Úřad vlády ČR,MVVI,NA,0,4,0
+12003060,Oddělení kontroly,0,0,NA,100320,ÚV ČR,Úřad vlády ČR,OPR,NA,0,4,0
+12003067,Oddělení veřejných zakázek,0,0,NA,110010,ÚV ČR,Úřad vlády ČR,OVZ,NA,0,4,0
+12003062,Oddělení právní,0,0,NA,100810,ÚV ČR,Úřad vlády ČR,OPR,NA,0,4,0
+12003069,Oddělení rozpočtové,0,0,NA,110110,ÚV ČR,Úřad vlády ČR,ORF,NA,0,4,0
+12003070,Oddělení finanční účtárny,0,0,NA,110120,ÚV ČR,Úřad vlády ČR,ORF,NA,0,4,0
+12003142,Oddělení RIA,0,0,NA,310020,ÚV ČR,Úřad vlády ČR,RIA,NA,0,4,0
+12003144,Odbor vládní legislativy,0,0,NA,310100,ÚV ČR,Úřad vlády ČR,OVL,NA,0,4,0
+12003143,Oddělení sekretariátu Etické komise ČR,0,0,NA,310030,ÚV ČR,Úřad vlády ČR,EKO,NA,0,4,0
+12003149,Odbor kompatibility,0,0,NA,310200,ÚV ČR,Úřad vlády ČR,KOM,NA,0,4,0
+12012271,Oddělení poradců ministra pro legislativ,0,0,NA,300120,ÚV ČR,Úřad vlády ČR,MLRV,NA,0,4,0
+12012230,Oddělení tiskové a administrativy,0,0,NA,300110,ÚV ČR,Úřad vlády ČR,MLRV,NA,0,4,0
+12012284,Oddělení poradců ministra pro evr. zálež,0,0,NA,700120,ÚV ČR,Úřad vlády ČR,MEZ,NA,0,4,0
+12012283,Oddělení PR,0,0,NA,700110,ÚV ČR,Úřad vlády ČR,MEZ,NA,0,4,0
+12012290,Oddělení odborné podpory,0,0,NA,800120,ÚV ČR,Úřad vlády ČR,MDG,NA,0,4,0
+12012289,Oddělení administrativní podpory,0,0,NA,800110,ÚV ČR,Úřad vlády ČR,MDG,NA,0,4,0
+12003110,Oddělení COREPER II,0,0,NA,230310,ÚV ČR,Úřad vlády ČR,OKE,NA,0,5,0
+12003111,Oddělení COREPER I,0,0,NA,230320,ÚV ČR,Úřad vlády ČR,OKE,NA,0,5,0
+12003112,Sekretariátu Výboru pro EU a RHSD,0,0,NA,230330,ÚV ČR,Úřad vlády ČR,OKE,NA,0,5,0
+12003114,Oddělení evropské komunikace,0,0,NA,230710,ÚV ČR,Úřad vlády ČR,OEZ,NA,0,5,0
+12003115,Oddělení pro eurocentra,0,0,NA,230720,ÚV ČR,Úřad vlády ČR,OEZ,NA,0,5,0
+12012171,Odd. ekonomických a fiskálních vztahů EU,0,0,NA,231110,ÚV ČR,Úřad vlády ČR,OVP,NA,0,5,0
+12003118,Oddělení hospodářských politik EU,0,0,NA,230830,ÚV ČR,Úřad vlády ČR,OVP,NA,0,5,0
+12003117,Oddělení Evropských programů a fondů,0,0,NA,230820,ÚV ČR,Úřad vlády ČR,OVP,NA,0,5,0
+12011494,Oddělení institucionální podpory,0,0,NA,231210,ÚV ČR,Úřad vlády ČR,OIP,NA,0,5,0
+12011495,Oddělení právně-analytické podpory,0,0,NA,231220,ÚV ČR,Úřad vlády ČR,OIP,NA,0,5,0
+12011986,Odd. pro komunik. předs. ČR v Radě EU,0,0,NA,230910,ÚV ČR,Úřad vlády ČR,OPRES,NA,0,5,0
+12011917,Odd. pro logistiku a org. předs. ČR v Ra,0,0,NA,230340,ÚV ČR,Úřad vlády ČR,OPRES,NA,0,5,0
+12003091,Oddělení tiskové,0,0,NA,210110,ÚV ČR,Úřad vlády ČR,OTI,NA,0,5,0
+12003092,Oddělení styku s veřejností,0,0,NA,210120,ÚV ČR,Úřad vlády ČR,OSV,NA,0,5,0
+12003093,Oddělení PR a marketingu,0,0,NA,210140,ÚV ČR,Úřad vlády ČR,OTI,NA,0,5,0
+12003098,Oddělení protokolu,0,0,NA,210310,ÚV ČR,Úřad vlády ČR,OPZ,NA,0,5,0
+12003099,Oddělení zahraničních vztahů,0,0,NA,210320,ÚV ČR,Úřad vlády ČR,OZP,NA,0,5,0
+12003168,Oddělení informačních systémů,0,0,NA,510320,ÚV ČR,Úřad vlády ČR,RVV,NA,0,5,0
+12003169,Oddělení hodnocení výzkumných organizací,0,0,NA,510330,ÚV ČR,Úřad vlády ČR,RVV,NA,0,5,0
+12012276,Oddělení zajištění činnosti Rady pro VVI,0,0,NA,510340,ÚV ČR,Úřad vlády ČR,RVV,NA,0,5,0
+12012278,Oddělení koncepcí a strategií VVI,0,0,NA,510510,ÚV ČR,Úřad vlády ČR,VVI,NA,0,5,0
+12012280,Oddělení publicity VVI,0,0,NA,510530,ÚV ČR,Úřad vlády ČR,VVI,NA,0,5,0
+12012279,Oddělení finanční podpory VVI,0,0,NA,510520,ÚV ČR,Úřad vlády ČR,VVI,NA,0,5,0
+12011053,Oddělení analýz a koordinace VVI,0,0,NA,200310,ÚV ČR,Úřad vlády ČR,VVI,NA,0,5,0
+12003148,Odd. podpůrných činností a sekr. LRV,0,0,NA,310160,ÚV ČR,Úřad vlády ČR,OVL,NA,0,5,0
+12003147,Odd. soukromoprávní regulace a fin. práv,0,0,NA,310150,ÚV ČR,Úřad vlády ČR,OVL,NA,0,5,0
+12003146,Oddělení veřejnoprávní regulace II,0,0,NA,310140,ÚV ČR,Úřad vlády ČR,OVL,NA,0,5,0
+12003145,Oddělení veřejnoprávní regulace I,0,0,NA,310130,ÚV ČR,Úřad vlády ČR,OVL,NA,0,5,0
+12003152,Oddělení pro legislativní proces EU,0,0,NA,310230,ÚV ČR,Úřad vlády ČR,KOM,NA,0,5,0
+12003151,Odd. informací pro kompatibilitu,0,0,NA,310220,ÚV ČR,Úřad vlády ČR,KOM,NA,0,5,0
+12003150,Oddělení analyticko-konzultační,0,0,NA,310210,ÚV ČR,Úřad vlády ČR,KOM,NA,0,5,0
