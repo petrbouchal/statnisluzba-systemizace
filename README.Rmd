@@ -7,16 +7,18 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = ""
 )
 ```
 
 ```{r, echo = FALSE}
 targets::tar_load(syst_all)
+targets::tar_load(syst_pocty_long)
 targets::tar_load(orgdata_graph)
-targets::tar_load(orgdata_nodes)
-targets::tar_load(orgdata_edges)
+targets::tar_load(orgdata_nodes_processed)
+targets::tar_load(orgdata_edges_processed)
 targets::tar_load(orgdata_rect)
+source("_targets_packages.R")
 ```
 
 ```{r}
@@ -56,8 +58,38 @@ Data currently available from `r min(syst_all$rok)` to `r max(syst_all$rok)`.
 #### Sample
 
 ```{r}
+syst_pocty_long |>
+  dplyr::filter(ustredni_organ, kapitola_vladni) |>
+  mutate(trida = as.integer(trida)) |>
+  group_by(rok, kapitola_zkr, level_nazev) |>
+  drop_na(pocet) |>
+  dplyr::filter(date == "2022-04-01") |>
+  summarise(trida_mean = weighted.mean(trida, w = pocet, na.rm = TRUE), 
+            .groups = "drop") |>
+  mutate(kapitola_zkr = as.factor(kapitola_zkr) |> fct_reorder(trida_mean, min)) |>
+  ggplot(aes(trida_mean, kapitola_zkr, colour = level_nazev)) +
+  geom_point(size = 3) +
+  scale_color_manual(name = "Úroveň řízení", values = c("grey50", "darkblue")) +
+  scale_x_continuous(limits = c(10, 15)) +
+  ptrr::theme_ptrr("both", multiplot = FALSE, legend.position = "top") +
+  labs(title = "Průměrná platová třída (2022)",
+       subtitle = "Podle systemizace 2022.\nJen ústřední orgány ve vládních kapitolách",
+       caption = "Plánovaný stav podle systemizace 2022")
+```
+
+
+Wide format
+
+```{r}
 syst_all
 ```
+
+Long format - staff numbers only
+
+```{r}
+syst_pocty_long
+```
+
 
 
 ### Organisational structures
@@ -81,6 +113,20 @@ For more info on data on public servants see [recent report](https://idea.cerge-
 
 #### Preview
 
+```{r}
+orgdata_graph |>
+  activate(nodes) |>
+  # mutate(xx = node_distance_to(nazev %in% c("odd.zákl.vzd."))) |>
+  dplyr::filter(nazev != "nic", urad_zkratka == "GFŘ") |>
+  # ggraph("star") +
+  ggraph("kk") +
+  geom_node_point(aes(size = child_ftes)) +
+  geom_edge_diagonal0() +
+  geom_node_label(aes(label = zkratka), vjust = "outward") +
+  scale_x_reverse()
+```
+
+
 Graph
 
 ```{r}
@@ -90,13 +136,13 @@ orgdata_graph
 Nodes
 
 ```{r}
-orgdata_edges_processed
+orgdata_nodes_processed
 ```
 
 Edges
 
 ```{r}
-orgdata_nodes_processed
+orgdata_edges_processed
 ```
 
 Table
