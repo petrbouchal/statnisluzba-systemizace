@@ -7,7 +7,23 @@ default:
                       20210126-systemizace-k-01-01-2021-tabulky-xlsx,
                       20220104-systemizace-k-01-01-2022-tabulkova-priloha-xlsx]
   syst_dir: data-input/syst
+  syst_skip: [3, 4, 4, 4, 4]
   tarify_dir: data-input/tarify
 
+  syst_eklep_dir: data-input/syst-eklep
+  syst_eklep_years: [2022, 2022, 2022]
+  syst_eklep_files: ["mp_KORNCCXK8D7C.xlsx",
+                     "mp_KORNCCXK8D7C.xlsx",
+                     "mp_KORNCCXK8D7C.xlsx"]
+  syst_eklep_periods: [2022-04-01, 2022-05-01, 2022-07-01]
+  syst_eklep_skip_prac: [3, 243, 251]
+  syst_eklep_nmax_prac: [237, 2, 17]
+  syst_eklep_skip_sluz: [3, 244, 252]
+  syst_eklep_nmax_sluz: [237, 2, 17]
+
   export_dir: "data-export"
+
+  # orgchart_xml: "~/cpers/statnisluzba-downloader/soubory-struktura/ISoSS_Opendata_OSYS_OSSS_20220501T120012.xml"
+  orgchart_url: "https://portal.isoss.cz/opendata/ISoSS_Opendata_OSYS_OSSS.xml"
+  orgchart_xml: "data-input/orgchart/orgchart.xml"
 

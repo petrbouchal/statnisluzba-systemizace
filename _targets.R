@@ -74,23 +74,75 @@ t_read_annual <- list(
                               "praxe_do_nad", "praxe_let")))
 )
 
-t_compile <- list(
-  tar_target(syst_all, compile_data(syst_sluz, syst_prac, kapitoly)),
+t_read_eklep <- list(
+  tar_target(syst_rows_skip_eklep_sluz, c_syst_eklep_skip_prac),
+  tar_target(syst_rows_skip_eklep_prac, c_syst_eklep_skip_sluz),
+  tar_target(syst_rows_nmax_eklep_sluz, c_syst_eklep_nmax_prac),
+  tar_target(syst_rows_nmax_eklep_prac, c_syst_eklep_nmax_sluz),
+  tar_target(syst_eklep_periods, c_syst_eklep_periods),
+  tar_target(syst_eklep_files, file.path(c_syst_eklep_dir, c_syst_eklep_files)),
+  tar_target(syst_eklep_years, c_syst_eklep_years),
+  tar_target(syst_prac_eklep,
+             load_syst(syst_eklep_files, syst_eklep_years, syst_eklep_periods,
+                       syst_rows_skip_eklep_prac,
+                       syst_rows_nmax_eklep_prac,
+                       sheet = 2),
+             pattern = map(syst_eklep_files, syst_eklep_years,
+                           syst_eklep_periods, syst_rows_skip_eklep_prac,
+                           syst_rows_nmax_eklep_prac)),
+  tar_target(syst_sluz_eklep,
+             load_syst(syst_eklep_files, syst_eklep_years, syst_eklep_periods,
+                       syst_rows_skip_eklep_sluz,
+                       syst_rows_nmax_eklep_sluz,
+                       sheet = 1),
+             pattern = map(syst_eklep_files, syst_eklep_years,
+                           syst_eklep_periods, syst_rows_skip_eklep_sluz,
+                           syst_rows_nmax_eklep_sluz))
+)
+
+t_compile_syst <- list(
+  tar_target(syst_annual, compile_data(syst_sluz, syst_prac, kapitoly)),
+  tar_target(syst_eklep, compile_data(syst_sluz_eklep, syst_prac_eklep, kapitoly)),
+  tar_target(syst_all, bind_rows(syst_annual |> mutate(src = "annual"),
+                                 syst_eklep  |> mutate(src = "eklep"))),
   tar_target(syst_pocty_long, lengthen_data(syst_all))
+)
+
+t_orgchart <- list(
+  tar_download(orgdata_xml, c_orgchart_url, c_orgchart_xml),
+  tar_target(urady_tbl, extract_urady(orgdata_xml)),
+  tar_target(orgdata_raw, extract_orgdata_raw(c_orgchart_xml, urady_tbl)),
+
+  tar_target(orgdata_nodes, extract_orgdata_nodes_from_raw(orgdata_raw)),
+  tar_target(orgdata_edges, extract_orgdata_edges_from_raw(orgdata_raw)),
+  tar_target(orgdata_graph, build_orgdata_graph(orgdata_nodes, orgdata_edges)),
+
+  tar_target(orgdata_nodes_processed, extract_orgdata_nodes_from_graph(orgdata_graph)),
+  tar_target(orgdata_edges_processed, extract_orgdata_edges_from_graph(orgdata_graph)),
+  tar_target(orgdata_rect, rectangularise_orgdata(orgdata_raw))
 )
 
 t_export <- list(
   tar_file(export_all, write_data(syst_all, file.path(c_export_dir, "systemizace_all.csv"))),
   tar_file(export_long_parquet, write_data(syst_pocty_long,
-                                   file.path(c_export_dir, "systemizace_pocty_long.parquet"),
-                                   arrow::write_parquet)),
+                                           file.path(c_export_dir, "systemizace_pocty_long.parquet"),
+                                           arrow::write_parquet)),
   tar_file(export_long_excel, write_data(syst_pocty_long,
-                                   file.path(c_export_dir, "systemizace_pocty_long.xlsx"),
-                                   writexl::write_xlsx)),
+                                         file.path(c_export_dir, "systemizace_pocty_long.xlsx"),
+                                         writexl::write_xlsx)),
   tar_file(export_long_csv, write_data(syst_pocty_long |> select(-kapitola_nazev, -kapitola_typ,
-                                                                   -organizace_typ, -kapitola_zkr,
-                                                                   -kapitola_vladni, -level_nazev),
-                                   file.path(c_export_dir, "systemizace_pocty_long.csv"),
-                                   write_excel_csv2))
+                                                                 -organizace_typ, -kapitola_zkr,
+                                                                 -kapitola_vladni, -level_nazev),
+                                       file.path(c_export_dir, "systemizace_pocty_long.csv"),
+                                       write_excel_csv2)),
+  tar_file(export_org_rect, write_data(orgdata_rect, file.path(c_export_dir, "struktura-hierarchie.csv"),
+                                       write_excel_csv2)),
+  tar_file(export_org_nodes, write_data(orgdata_nodes_processed,
+                                        file.path(c_export_dir, "struktura-nodes.csv"),
+                                        write_excel_csv2)),
+  tar_file(export_org_edges, write_data(orgdata_edges_processed,
+                                        file.path(c_export_dir, "struktura-edges.csv"),
+                                        write_excel_csv2))
+
 )
-list(t_files, t_read, t_compile, t_export)
+list(t_files, t_read_annual, t_read_eklep, t_compile_syst, t_export, t_orgchart)
