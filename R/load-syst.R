@@ -1,13 +1,13 @@
-load_syst <- function(path, yr, skip, sheet = 1) {
+load_syst <- function(path, yr, period, skip, nmax = Inf, sheet = 1) {
 
-  nms <- c("kapitola_kod", "organizace_nazev",
+  nms_shrt <- c("kapitola_kod", "organizace_nazev",
            "pocet_predst",
-           paste0("pocet_predst_", str_pad(c(5:16), 2, side = "left", pad = "0")),
+           paste0("pocet_predst_", str_pad(c(1:16), 2, side = "left", pad = "0")),
            "pocet_ostat",
-           paste0("pocet_ostat_", str_pad(c(5:16), 2, side = "left", pad = "0")),
+           paste0("pocet_ostat_", str_pad(c(1:16), 2, side = "left", pad = "0")),
            "platy_celkem", "pozad_obcanstvi", "pozad_zakazkonkurence"
   )
-  nms_prac <- c("kapitola_kod", "organizace_nazev",
+  nms_long <- c("kapitola_kod", "organizace_nazev",
                 "pocet_predst",
                 "pocet_predst_M",
                 paste0("pocet_predst_", str_pad(c(1:16), 2, side = "left", pad = "0")),
@@ -16,20 +16,29 @@ load_syst <- function(path, yr, skip, sheet = 1) {
                 paste0("pocet_ostat_", str_pad(c(1:16), 2, side = "left", pad = "0")),
                 "platy_celkem", "pozad_obcanstvi", "pozad_zakazkonkurence"
   )
+
+
   x <- readxl::read_excel(path, sheet = sheet,
-                          skip = skip)
-  if(yr == 2018) x <- x[,-1] # drop hidden stray first column
-  x <- janitor::remove_empty(x[-1,], which = "cols")
+                          skip = skip, n_max = nmax)
+  if(yr == 2018) x <- x[,-1:-2] # drop hidden stray first column
+  new_names <- if(ncol(x) == 39) nms_shrt else nms_long
 
-  nms <- if(sheet == 1) nms else nms_prac
-
-  names(x) <- nms
+  names(x) <- new_names
   x$rok <- yr
+
+  print(yr)
+  print(path)
+  print(period)
+  print(sheet)
+  print(x[1,] |> as.character())
+  print(names(x))
+  print(new_names)
 
   x <- mutate(x, across(3:ncol(x), as.numeric),
               pocet_celkem = pocet_predst + pocet_ostat,
               rok = as.integer(rok),
-              kapitola_kod = if_else(kapitola_kod == "307*", "307", kapitola_kod))
+              date = as.Date(period),
+              kapitola_kod = if_else(kapitola_kod == "307*", "307", as.character(kapitola_kod)))
 
   return(x)
 

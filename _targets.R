@@ -7,6 +7,7 @@ library(future)
 options(conflicts.policy = list(warn = FALSE))
 conflicted::conflict_prefer("get", "base", quiet = TRUE)
 conflicted::conflict_prefer("merge", "base", quiet = TRUE)
+conflicted::conflict_prefer("filter", "dplyr", quiet = TRUE)
 options(clustermq.scheduler = "LOCAL")
 
 cnf <- config::get()
@@ -20,6 +21,7 @@ rm(nms_orig)
 tar_option_set(packages = c("dplyr", "statnipokladna", "here", "readxl",
                             "janitor", "curl", "stringr", "config", "conflicted",
                             "dplyr", "future", "tidyr","ragg", "magrittr",
+                            "furrr", "ggraph", "tidygraph", "purrr",
                             "lubridate", "writexl", "readr", "purrr", "ptrr",
                             "pointblank", "tarchetypes", "forcats", "ggplot2"),
                # debug = "compiled_macro_sum_quarterly",
@@ -34,8 +36,8 @@ options(crayon.enabled = TRUE,
 
 future::plan(multisession)
 
-source("R/utils.R")
-source("R/functions.R")
+for (file in list.files("R", full.names = TRUE)) source(file)
+
 source("_targets_packages.R")
 
 syst_urls <- paste0(c_syst_base_url, "/",
@@ -51,15 +53,16 @@ t_files <- list(
   tar_target(t_syst_files, syst_files),
   tar_target(syst_xlsx, curl::curl_download(t_syst_urls, t_syst_files),
              pattern = map(t_syst_urls, t_syst_files), format = "file")
-  )
+)
 
-t_read <- list(
-  tar_target(syst_rows_skip, c(2, 3, 3, 3, 3)),
+t_read_annual <- list(
+  tar_target(syst_rows_skip, c_syst_skip),
   tar_target(syst_years, as.integer(c_syst_years)),
-  tar_target(syst_sluz, load_syst(syst_xlsx, syst_years, syst_rows_skip, sheet = 1),
-             pattern = map(syst_xlsx, syst_years, syst_rows_skip)),
-  tar_target(syst_prac, load_syst(syst_xlsx, syst_years, syst_rows_skip, sheet = 2),
-             pattern = map(syst_xlsx, syst_years, syst_rows_skip)),
+  tar_target(syst_periods, make_date(syst_years, 1, 1)),
+  tar_target(syst_sluz, load_syst(syst_xlsx, syst_years, syst_periods, syst_rows_skip, sheet = 1),
+             pattern = map(syst_xlsx, syst_years, syst_rows_skip, syst_periods)),
+  tar_target(syst_prac, load_syst(syst_xlsx, syst_years, syst_periods, syst_rows_skip, sheet = 2),
+             pattern = map(syst_xlsx, syst_years, syst_periods, syst_rows_skip)),
   tar_file_read(kapitoly, "data-input/kapitoly.csv", read_csv(!!.x, col_types = "cccl")),
   tar_file_read(tarify_2021,
                 # https://www.mfcr.cz/cs/o-ministerstvu/informacni-systemy/is-o-platech/
