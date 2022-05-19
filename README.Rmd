@@ -9,6 +9,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "",
   echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
   fig.retina = 3
 )
 ```

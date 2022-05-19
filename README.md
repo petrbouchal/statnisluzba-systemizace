@@ -36,8 +36,6 @@ Data currently available from 2018 to 2022.
 
 #### Sample
 
-    Warning in mask$eval_all_mutate(quo): NAs introduced by coercion
-
 <img src="README_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
 
 Wide format
@@ -214,4 +212,4 @@ targets::tar_make()
 
 Tidy data ready for analysis are in `data-export`. Codebook is TBA.
 
-Rendered 2022-05-19 23:24:49
+Rendered 2022-05-19 23:31:43
