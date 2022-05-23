@@ -6,7 +6,7 @@ targets::tar_load(syst_pocty_long)
 conflict_prefer("filter", "dplyr")
 
 syst_all |>
-  filter(kapitola_kod != "Celkem", date < "2022-05-01") |>
+  filter(kapitola_kod != "Celkem", date < "2022-04-01") |>
   select(date, pocet_predst, pocet_ostat, vztah, pozad_obcanstvi, pozad_zakazkonkurence) |>
   group_by(date, vztah) |>
   summarise(across(c(pocet_predst, pocet_ostat), sum, na.rm = TRUE), .groups = "drop") |>
@@ -52,16 +52,17 @@ syst_pocty_long |>
 syst_pocty_long |>
   filter(kapitola_vladni) |>
   filter(ustredni_organ) |>
-  count(rok, kapitola_zkr, level, wt = pocet) |>
-  group_by(rok, kapitola_zkr) |>
+  count(date, kapitola_zkr, level, wt = pocet) |>
+  group_by(date, kapitola_zkr) |>
   mutate(podil = n/sum(n)) |>
   filter(level == "predst") |>
   arrange(-podil) |>
-  ggplot(aes(rok, podil)) +
+  ggplot(aes(date, podil)) +
   geom_line() +
   geom_point() +
   ptrr::scale_y_percent_cz() +
   facet_wrap(~kapitola_zkr) +
+  scale_x_date(date_breaks = "1 years", date_labels = "%Y") +
   ptrr::theme_ptrr(multiplot = TRUE) +
   labs(title = "Podíl představených na celkovém počtu míst",
        subtitle = "Podle systemizace.\nJen ústřední orgány ve vládních kapitolách",
@@ -107,17 +108,20 @@ syst_pocty_long |>
        caption = "Plánovaný stav podle systemizace")
 
 syst_pocty_long |>
-  filter(ustredni_organ, kapitola_vladni) |>
+  filter(kapitola_kod != "Celkem") |>
+  # filter(ustredni_organ, kapitola_vladni) |>
+  filter(ustredni_organ) |>
+  # filter(str_detect(organizace_nazev, "[Hh]yg")) |>
   mutate(trida = as.integer(trida)) |>
-  group_by(rok, kapitola_zkr, level_nazev) |>
+  group_by(rok, organizace_nazev, level_nazev) |>
   drop_na(pocet) |>
-  filter(datum == "2022-04-01") |>
+  filter(date == "2022-04-01") |>
   summarise(trida_mean = weighted.mean(trida, w = pocet, na.rm = TRUE), .groups = "drop") |>
-  mutate(kapitola_zkr = as.factor(kapitola_zkr) |> fct_reorder(trida_mean, min)) |>
-  ggplot(aes(trida_mean, kapitola_zkr, colour = level_nazev)) +
+  mutate(organizace_nazev = as.factor(organizace_nazev) |> fct_reorder(trida_mean, min)) |>
+  ggplot(aes(trida_mean, organizace_nazev, colour = level_nazev)) +
   geom_point(size = 3) +
   scale_color_manual(name = "Úroveň řízení", values = c("grey50", "darkblue")) +
-  scale_x_continuous(limits = c(10, 15)) +
+  scale_x_continuous(limits = c(8, 15)) +
   ptrr::theme_ptrr("both", multiplot = FALSE, legend.position = "top") +
   labs(title = "Průměrná platová třída (2022)",
        subtitle = "Podle systemizace 2022.\nJen ústřední orgány ve vládních kapitolách",
