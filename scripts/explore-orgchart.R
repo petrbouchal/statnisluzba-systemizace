@@ -46,6 +46,19 @@ orgdata_graph |>
   geom_node_label(aes(label = nazev), hjust = "inward") +
   scale_y_reverse()
 
+## Jedno ministerstvo ------------------------------------------------------
+
+orgdata_graph |>
+  activate(nodes) |>
+  # mutate(xx = node_distance_to(nazev %in% c("odd.zákl.vzd."))) |>
+  filter(nazev != "nic", urad_zkratka == "GFŘ") |>
+  # ggraph("star") +
+  ggraph("kk") +
+  geom_node_point(aes(size = child_ftes)) +
+  geom_edge_diagonal0() +
+  geom_node_label(aes(label = zkratka), vjust = "outward") +
+  scale_x_reverse()
+
 ## Všechny útvary nadřazené danému útvaru ----------------------------------
 
 orgdata_graph |>
