@@ -53,7 +53,7 @@ compile_data <- function(syst_sluz, syst_prac, kapitoly) {
     left_join(kapitoly, by = "kapitola_kod") |>
     relocate(rok, kapitola_kod, kapitola_zkr, organizace_nazev, ustredni_organ,
              vztah, pocet_celkem, plat_prumer) |>
-    mutate(organizace_typ = if_else(ustredni_organ, "Centrální ministerstvo", "Mimo ministerstvo"),
+    mutate(organizace_typ = if_else(ustredni_organ, "Ústřední orgán", "Jiné organizace"),
            kapitola_typ = if_else(kapitola_vladni, "Ministerstva a ÚV", "Ostatní kapitoly"))
 }
 
