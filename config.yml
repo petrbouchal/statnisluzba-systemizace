@@ -1,13 +1,14 @@
 default:
   syst_base_url: https://www.mvcr.cz/sluzba/soubor
-  syst_years: !expr 2018:2022
+  syst_years: !expr 2018:2023
   syst_files_online: [zakladni-systemizace-tabulky-23-10-2017,
                       11-29-tabulkove-prilohy.xlsx,
                       20191126-systematizace-vladni-tabulka-xlsx,
                       20210126-systemizace-k-01-01-2021-tabulky-xlsx,
-                      20220104-systemizace-k-01-01-2022-tabulkova-priloha-xlsx]
+                      20220104-systemizace-k-01-01-2022-tabulkova-priloha-xlsx,
+                      20230105-systemizace-k-01-01-2023-tabulky-xlsx]
   syst_dir: data-input/syst
-  syst_skip: [3, 4, 4, 4, 4]
+  syst_skip: [3, 4, 4, 4, 4, 4]
   tarify_dir: data-input/tarify
 
   syst_eklep_dir: data-input/syst-eklep
@@ -23,7 +24,9 @@ default:
 
   export_dir: "data-export"
 
-  # orgchart_xml: "~/cpers/statnisluzba-downloader/soubory-struktura/ISoSS_Opendata_OSYS_OSSS_20220501T120012.xml"
+  # orgchart_xml: "~/cpers/statnisluzba-downloader/soubory-struktura/ISoSS_Opendata_OSYS_OSSS_20220215T020004.xml"
   orgchart_url: "https://portal.isoss.cz/opendata/ISoSS_Opendata_OSYS_OSSS.xml"
-  orgchart_xml: "data-input/orgchart/orgchart.xml"
+  orgchart_xml_local: "/Users/petr/cpers/statnisluzba-downloader/soubory-struktura/ISoSS_Opendata_OSYS_OSSS_20220731T140004.xml"
+  orgchart_xml_target: "data-input/orgchart/orgchart.xml"
+  orgchart_use_local: true
 

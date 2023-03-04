@@ -1,5 +1,5 @@
 download_ovm <- function(url = "https://rpp-opendata.egon.gov.cz/odrpp/datovasada/ovm.json",
-                         file = tempfile()) {
+                         file = file.path("data-input", basename(url))) {
   file <- curl::curl_download(url, file)
   return(file)
 }

@@ -1,0 +1,114 @@
+---
+title: "Pozice ve státní službě"
+format: html
+execute: 
+  warning: false
+  message: false
+  echo: false
+  
+---
+
+```{r setup, message=FALSE}
+```
+
+```{r}
+targets::tar_load(cis_predstaveni)
+targets::tar_load(jobs_uniq_subbed)
+targets::tar_load(jobs_salary_sims_subbed)
+```
+
+```{r}
+ojs_define(jobs0 = jobs_uniq_subbed)
+ojs_define(sims0 = jobs_salary_sims_subbed)
+```
+
+```{ojs}
+//| panel: input
+//| layout-ncol: 2
+
+viewof foundjobs = Inputs.search(jobs, {label: "Hledat", columns: ["urad_nazev", "nazev", "popis"]})
+
+viewof aktualni = Inputs.toggle({label: "Jen aktuální", value: true})
+
+```
+
+```{ojs}
+jobs = { if(!aktualni) { return transpose(jobs0)} else {return transpose(jobs0).filter(e => e.aktualni == true)}}
+```
+
+
+```{ojs}
+sims = transpose(sims0)
+```
+
+
+```{ojs}
+//| panel: input
+
+viewof filtrd = Inputs.checkbox(d3.group(foundjobs, d => d.predstaveny_nazev), {label: "Úroveň vedení", sort: "descending", key: ["není představený"]})
+```
+
+```{ojs}
+//| panel: input
+//| layout-ncol: 2
+
+viewof filtrd2 = Inputs.checkbox(d3.group(filtrd.flat(), d => d.platova_trida), {label: "Třída", sort: "ascending", key: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]})
+
+viewof klicove = Inputs.toggle({label: "Jen klíčové", value: false})
+```
+
+
+```{ojs}
+
+viewof selection = Inputs.table(filtrd2.flat().filter(e =>  e.klicove_priznak == klicove), 
+{columns: [
+    "urad_nazev",
+    "nazev",
+    "popis",
+    "is_predstaveny",
+    "platova_trida",
+    "klicove_priznak",
+    "id_nodate"
+  ], required: false, multiple: false, value: filtrd2.flat()[0]})
+```
+
+<br />
+<br />
+
+```{ojs}
+slct_id = selection.id_nodate
+```
+
+
+```{ojs}
+//| panel: input
+//| layout-ncol: 3
+ 
+viewof praxe_slct = Inputs.select(sims.map(d => d.praxe_do), 
+                                  {sort: true, unique: true, label: "Počet let zkušeností", width: 60})
+viewof is_key = Inputs.toggle({label: "Klíčová pozice", disabled: !selection.klicove_lze, value: selection.klicove_priznak})
+viewof is_expert = Inputs.toggle({label: "Všeobecně uznávaný expert"})
+```
+
+```{ojs}
+viewof sms = Inputs.table(sims.filter(e => e.id_nodate == slct_id)
+                              .filter(e => e.praxe_do == praxe_slct)
+                              .filter(e => e.expert == is_expert)
+                              .filter(e => e.key == is_key),
+  {columns: [
+      <!-- "id_nodate", -->
+      <!-- "range", -->
+      <!-- "value", -->
+      "ved",
+      <!-- "key", -->
+      <!-- "expert", -->
+      "min", 
+      "typicallower",
+      "typicalmid",
+      "typicalmax",
+      "max",
+      "maxmultminosobko",
+      "maxmultmaxosobko"
+      ]}
+  )
+```

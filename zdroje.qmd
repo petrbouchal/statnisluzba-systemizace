@@ -1,0 +1,50 @@
+---
+title: "zdroje"
+format: html
+editor: visual
+---
+
+```{r setup}
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(stringr)
+library(tidyr)
+```
+
+# Zdroje a výpočty
+
+## Volná místa
+
+## Platové tabulky
+
+- pro 2021 a 2022 bereme z MF, 2023 z [přílohy nařízení](https://www.zakonyprolidi.cz/cs/2014-304#prilohy) a vkládáme ručně do stejné datové formy 
+
+## Kategorizace úřadů
+
+- [seznam](https://www.mvcr.cz/sluzba/clanek/seznam-sluzebnich-uradu.aspx) - je též ve výročce a měl by odpovídat číselníku; barvy naznačují kategorie ÚO; centrální; územní
+- zde není jasné, jaký je vztah mezi celostátními, územními a ostaními (kategorie pro stanovování příplatků za vedení) a třemi kategoriemi z tomto dokumentu a ve výročce
+- kategorie podle číselníku OVM moc nepomáhají
+
+
+## Pravidla pro výpočet odhadovaného platu
+
+- [celkové informace o odměňování](https://www.mvcr.cz/sluzba/clanek/odmenovani-statnich-zamestnancu.aspx)
+- výčet oborů, ve kterých lze vytvořit klíčová služební místa, je [v příloze I nařízení vlády](https://www.zakonyprolidi.cz/cs/2014-304#prilohy)
+
+### Typická služební hodnocení
+
+- jsou ve výročce, následně je používám pouze přibližně, protože není jasné, jak využít informaci podle typu úřadu a asi nemá smysl pracovat s přesnými čísly za jednotlivé úrovně hodnocení
+
+### Výše osobních příplatků
+
+- jsou ve výročce, následně je používám pouze přibližně, protože není jasné, jak využít informaci podle typu úřadu a asi nemá smysl pracovat s přesnými čísly za jednotlivé kategorie
+- ve výročce není jasné, co je ukazované procento
+  - osobko jako % celého platu (zřejmě ano)
+  - osobko jako % horní hranice tarifu (tak jak se počítá při stanovování platu)
+  - osobko jako % tarifu daného člověka (asi ne)
+
+### Výše příplatků za vedení
+
+- [příplatky za vedení](https://www.mvcr.cz/sluzba/soubor/priloha-c-2-rozpeti-priplatku-za-vedeni-pdf.aspx) - zde třeba nějak použít kategorizaci úřadů
+
