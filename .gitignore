@@ -3,3 +3,8 @@
 .Rdata
 .httr-oauth
 .DS_Store
+
+/.quarto/
+
+# Local Netlify folder
+.netlify
