@@ -60,8 +60,8 @@ filtrd3 = filtrd2.flat().filter(e =>  e.klicove_priznak == klicove)
 
 viewof selection = Inputs.table(filtrd3, 
 {columns: [
-    "urad_nazev",
     "nazev",
+    "urad_nazev",
     "popis",
     "is_predstaveny",
     "platova_trida",
