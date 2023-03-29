@@ -124,16 +124,16 @@ simulate_salaries <- function(jobs_uniq, tarify, priplatky_vedeni) {
     left_join(priplatky_vedeni, by = "predstaveny") |>
     left_join(tarif_max, by = join_by(trida, rok)) |>
     full_join(tarify, by = join_by(trida, rok),
-              multiple = "all") |>
+              multiple = "all", relationship = "many-to-many") |>
     rename(tarif = plat)
 
   pay_simulations <- pay_simulations_base |>
     mutate(pay_nokey_noexpert_min = tarif,
-           pay_nokey_noexpert_typicallower = if_else(is.na(predstaveny), tarif / (1 - 0.14), tarif / (1 - 0.17)), # dobré hodnocení, střední hodnota typu org
-           pay_nokey_noexpert_typicalmid = if_else(is.na(predstaveny), tarif / (1 - 0.20), tarif / (1 - 0.26)), # mezi vynikajícím a velmi dobrým, střední hodnota typu org
-           pay_nokey_noexpert_typicalmax = if_else(is.na(predstaveny), tarif / (1 - 0.24), tarif / (1 - 0.30)), # mezi vynikajícím a velmi dobrým, střední hodnota typu org
+           pay_nokey_noexpert_typicallower = if_else(is.na(predstaveny), tarif + tarif_max * 0.14, tarif + tarif_max * 0.17), # dobré hodnocení, střední hodnota typu org
+           pay_nokey_noexpert_typicalmid = if_else(is.na(predstaveny), tarif + tarif_max * 0.20, tarif + tarif_max * 0.26), # mezi vynikajícím a velmi dobrým, střední hodnota typu org
+           pay_nokey_noexpert_typicalmax = if_else(is.na(predstaveny), tarif + tarif_max * 0.24, tarif + tarif_max * 0.30), # mezi vynikajícím a velmi dobrým, střední hodnota typu org
            pay_nokey_noexpert_max = tarif + tarif_max * 0.5,
-           pay_nokey_expert_typicalmid = if_else(is.na(predstaveny), tarif / (1 - 0.52), tarif / (1 - 0.54)), # expart, střední hodnota org
+           pay_nokey_expert_typicalmid = if_else(is.na(predstaveny), tarif + tarif_max * 0.52, tarif + tarif_max * 0.54), # expart, střední hodnota org
            pay_nokey_expert_max = tarif + tarif_max, # vynikající, max
            pay_key_noexpert_maxmultminosobko = tarif * 2, # max osobka
            pay_key_noexpert_maxmultmaxosobko = tarif * 2 + tarif_max * 0.5, # max osobka
@@ -141,13 +141,15 @@ simulate_salaries <- function(jobs_uniq, tarify, priplatky_vedeni) {
            vedeni_max = case_match(urad_kategorie_priplatek,
                                    "ustredni" ~ tarif_max * usu_max / 100,
                                    "uzemni" ~ tarif_max * suu_max / 100,
-                                   "ostatni" ~ tarif_max * su_max / 100,
+                                   "celostatni" ~ tarif_max * su_max / 100,
+                                   "ostatni" ~ tarif_max * osu_max / 100,
 
            ),
            vedeni_min = case_match(urad_kategorie_priplatek,
                                    "ustredni" ~ tarif_max * usu_min / 100,
                                    "uzemni" ~ tarif_max * suu_min / 100,
-                                   "ostatni" ~ tarif_max * su_min / 100,
+                                   "celostatni" ~ tarif_max * su_min / 100,
+                                   "ostatni" ~ tarif_max * osu_min / 100,
 
            ),
     ) |>
@@ -196,8 +198,8 @@ sub_jobs_for_app <- function(jobs_uniq) {
 }
 
 export_jobs_for_app <- function(jobs_uniq_subbed) {
-  outfile <- "data-export/app_jobs.csv"
-  write_csv(jobs_uniq_subbed, outfile)
+  outfile <- "data-export/app_jobs.json"
+  write_json(jobs_uniq_subbed, outfile)
   return(outfile)
 }
 
