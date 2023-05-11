@@ -117,7 +117,7 @@ build_orgdata_graph <- function(orgdata_nodes, orgdata_edges) {
     activate(nodes) |>
     mutate(mista_celkem = mista_sluz + mista_prac,
            dpth = bfs_dist(root = root_id),
-           child_ftes = map_local_dbl(order = Inf, mode= "out",
+           child_ftes = map_local_dbl(order = 20, mode= "out",
                                       .f = calc_stat, .col = mista_celkem, .fn = sum)) |>
     activate(edges)
 
