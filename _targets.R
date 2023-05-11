@@ -24,7 +24,7 @@ rm(nms_orig)
 tar_option_set(packages = c("dplyr", "tidygraph", "statnipokladna", "here", "readxl", "xml2",
                             "janitor", "curl", "stringr", "config", "conflicted",
                             "future", "tidyr","ragg", "magrittr", "tibble",
-                            "furrr", "ggraph", "purrr", "jsonlite",
+                            "furrr", "ggraph", "purrr", "jsonlite", "glue",
                             "lubridate", "writexl", "readr", "ptrr",
                             "pointblank", "tarchetypes", "forcats", "ggplot2"),
                # debug = "compiled_macro_sum_quarterly",
@@ -185,7 +185,8 @@ t_orgchart <- list(
 
   tar_target(orgdata_nodes_processed, extract_orgdata_nodes_from_graph(orgdata_graph)),
   tar_target(orgdata_edges_processed, extract_orgdata_edges_from_graph(orgdata_graph)),
-  tar_target(orgdata_rect, rectangularise_orgdata(orgdata_raw))
+  tar_target(orgdata_rect, rectangularise_orgdata(orgdata_raw)),
+  tar_target(orgdata_date, get_orgdata_date(orgdata_xml))
 )
 
 job_files_xml <- list.files("~/cpers/statnisluzba-downloader/soubory-mista/", full.names = TRUE)
@@ -251,9 +252,35 @@ t_export <- list(
 
 )
 
+# Generate org pages ------------------------------------------------------
+
+# for static branching below, we need these as objects, not dynamic targets
+# so reextract this
+# note: perhaps we can do this with dynamic branching instead?
+
+org_tbl <- extract_urady(c_orgchart_xml_local)
+org_ids <- make_org_ids(org_tbl)
+
+org_pages <- list(
+  tar_file(org_qmd_template, "org_template.qmd"),
+  # generate a page for each of ~200 orgs
+  tar_map(
+    values = tibble(org_id = unname(org_ids),
+                    org_nazev = names(org_ids)),
+    names = org_id,
+    tar_target(doc_org, render_org(org_qmd_template, org_id, org_nazev, "orgs",
+                                   # force deps that targets will not detect
+                                   # in org_template.qmd
+                                   orgdata_graph, orgdata_date, urady_tbl),
+               priority = .999, format = "file")),
+  # generate yaml file which will populate the listing on the index page
+  tar_file(org_listing_yaml, make_org_listing_yaml(urady_tbl, "orgs/org_listing.yaml"))
+
+)
+
 # Run ---------------------------------------------------------------------
 
 
 list(t_files, t_read_annual, t_read_eklep, t_compile_syst, t_export, t_orgchart,
-     t_jobs,
+     t_jobs, org_pages,
      t_meta, t_ciselniky)

@@ -1,10 +1,7 @@
 project:
   type: website
   output-dir: docs
-  resources: "data-export/app_sims/*"
-
-website:
-  title: "systemizace"
+  resources: ["/orgs/site_libs", "/orgs/*.html", "/orgs/styles.css", "/data-export/app_sims/*", "/data-export/app_jobs.json"]
 
 format:
   html:

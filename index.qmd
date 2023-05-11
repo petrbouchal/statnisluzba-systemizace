@@ -1,6 +1,9 @@
 ---
 title: "Pozice ve státní službě"
-format: html
+title-prefix: ""
+format: 
+  html:
+    title-prefix: ""
 execute: 
   warning: false
   message: false

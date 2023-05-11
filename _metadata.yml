@@ -1,0 +1,5 @@
+project:
+  output-dir: docs
+title-prefix: ""
+website:
+  title: "systemizace"

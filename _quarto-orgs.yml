@@ -1,0 +1,6 @@
+project:
+  resources: []
+  output-dir: orgs
+
+website:
+  title: "Organogramy"
