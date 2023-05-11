@@ -111,10 +111,13 @@ calc_stat <- function(neighborhood, .col, .fn, ...) {
 
 build_orgdata_graph <- function(orgdata_nodes, orgdata_edges) {
 
-  root_id = nrow(orgdata_nodes)
+  root_id = nrow(orgdata_nodes) + 1
 
-  x <- tbl_graph(orgdata_nodes, orgdata_edges, directed = TRUE) |>
+  x <- tbl_graph(orgdata_nodes |> add_row(name = "svet"),
+                 orgdata_edges |> replace_na(list(from = "svet")),
+                 directed = TRUE) |>
     activate(nodes) |>
+    # replace_na(list(mista_sluz = 0, mista_prac = 0)) |>
     mutate(mista_celkem = mista_sluz + mista_prac,
            dpth = bfs_dist(root = root_id),
            child_ftes = map_local_dbl(order = 20, mode= "out",
