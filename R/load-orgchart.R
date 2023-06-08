@@ -90,6 +90,7 @@ extract_orgdata_edges_from_graph <- function(orgdata_graph, ...) {
     rename(from = from_new, to = to_new)
   return(orgdata_jednomini_edges)
 }
+
 extract_orgdata_nodes_from_graph <- function(orgdata_graph, ...) {
   orgdata_graph_jednomini <- orgdata_graph |>
     activate(nodes) |>
@@ -126,4 +127,11 @@ build_orgdata_graph <- function(orgdata_nodes, orgdata_edges) {
 
   xx <- dplyr::filter(x, !(from == 1 & to == root_id))
   return(xx)
+}
+
+get_orgdata_date <- function(orgdata_xml) {
+  dt <- xml2::read_xml(orgdata_xml) |> xml2::as_list()
+
+  dtm <- dt$organizacni_struktura_sluzebnich_uradu$ExportInfo$ExportDatumCas[[1]]
+  lubridate::as_datetime(dtm) |> lubridate::as_date()
 }
