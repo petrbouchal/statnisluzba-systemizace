@@ -4,14 +4,18 @@ library(tibble)
 library(future)
 library(furrr)
 library(tictoc)
-library(tidyverse)
+library(dplyr)
 library(tidygraph)
 library(ggraph)
 library(visNetwork)
+library(dplyr)
 
+source("_targets_packages.R")
 plan(multisession)
 
 source("R/load-orgchart.R")
+source("R/visnetwork.R")
+conflict_prefer("filter", "dplyr")
 
 # Načtení -----------------------------------------------------------------
 
@@ -37,7 +41,8 @@ orgdata_graph |> activate(nodes) |> as_tibble() |> View()
 
 orgdata_graph |>
   activate(nodes) |>
-  mutate(xx = node_distance_from(nazev %in% c("200-Sekce rodinné politiky a soc. služ."))) |>
+  filter(nazev != "nic") |>
+  mutate(xx = node_distance_from(str_detect(nazev, "Odbor ekonomických analýz"))) |>
   filter(xx != Inf) |>
   ggraph(layout = "tree") +
   geom_node_point(aes(size = child_ftes)) +
@@ -51,12 +56,12 @@ orgdata_graph |>
 orgdata_graph |>
   activate(nodes) |>
   # mutate(xx = node_distance_to(nazev %in% c("odd.zákl.vzd."))) |>
-  filter(nazev != "nic", urad_zkratka == "GFŘ") |>
+  filter(nazev != "nic", urad_zkratka == "MPO ČR") |>
   # ggraph("star") +
   ggraph("kk") +
   geom_node_point(aes(size = child_ftes)) +
   geom_edge_diagonal0() +
-  geom_node_label(aes(label = zkratka), vjust = "outward") +
+  geom_node_label(aes(label = nazev), vjust = "outward") +
   scale_x_reverse()
 
 ## Všechny útvary nadřazené danému útvaru ----------------------------------
@@ -64,8 +69,8 @@ orgdata_graph |>
 orgdata_graph |>
   activate(nodes) |>
   # mutate(xx = node_distance_to(nazev %in% c("odd.zákl.vzd."))) |>
-  filter(nazev != "nic", urad_zkratka == "MPSV ČR") |>
-  mutate(xx = node_distance_to(str_detect(nazev, "začle|integra|integro"), mode = "in")) |>
+  filter(nazev != "nic", urad_zkratka == "MPO ČR") |>
+  mutate(xx = node_distance_to(str_detect(nazev, "Odbor ekonomických analýz"), mode = "out")) |>
   # activate(nodes) |> as_tibble() |>  View()
   filter(xx != Inf) |>
   ggraph(layout = "tree") +
@@ -78,8 +83,8 @@ orgdata_graph |>
 
 orgdata_graph |>
   activate(nodes) |>
-  mutate(xx = node_distance_from(str_detect(nazev, "^sek.vzděl") &
-                                 urad_zkratka == "MŠMT ČR")) |>
+  mutate(xx = node_distance_from(str_detect(nazev, "Odbor ekonomických analýz") &
+                                   urad_zkratka == "MPO ČR")) |>
   filter(xx != Inf) |>
   ggraph(layout = "tree") +
   geom_node_point(aes(size = child_ftes)) +
@@ -93,7 +98,8 @@ orgdata_graph |>
 ggraph(orgdata_graph |>
          activate(nodes) |>
          filter(str_detect(urad_nazev, "^Ministerstvo|Úřad vlády"),
-                urad_zkratka == "MPSV ČR", str_detect(zkratka, "^2")),
+                urad_zkratka == "MPO ČR",
+                dpth <= 3),
        layout = "tree", circular = TRUE) +
   geom_edge_diagonal() +
   geom_node_point(aes(colour = dpth)) +
@@ -155,10 +161,10 @@ ggraph(orgdata_graph |>
 library(ggiraph)
 
 ggg <- ggraph(orgdata_graph |>
-         activate(nodes) |>
-         filter(str_detect(urad_nazev, "^Ministerstvo|Úřad vlády"),
-                urad_nazev == "Ministerstvo práce a sociálních věcí"),
-       layout = "tree", circular = TRUE) +
+                activate(nodes) |>
+                filter(str_detect(urad_nazev, "^Ministerstvo|Úřad vlády"),
+                       urad_nazev == "Ministerstvo práce a sociálních věcí"),
+              layout = "tree", circular = TRUE) +
   geom_edge_diagonal() +
   geom_node_point(aes(fill = urad_nazev, size = child_ftes), colour = "black") +
   # geom_node_label(aes(label = child_stat)) +
@@ -196,36 +202,43 @@ orgdata_graph
 
 library(visNetwork)
 
-orgdata_jednomini_edges <- extract_orgdata_edges_from_graph(orgdata_graph, urad_zkratka == "MŽP ČR")
-orgdata_jednomini_nodes <- extract_orgdata_nodes_from_graph(orgdata_graph, urad_zkratka == "MŽP ČR")
+orgdata_jednomini_edges <- extract_orgdata_edges_from_graph(orgdata_graph, urad_zkratka == "MF ČR")
+orgdata_jednomini_nodes <- extract_orgdata_nodes_from_graph(orgdata_graph, urad_zkratka == "MF ČR")
 orgdata_druhemini_edges <- extract_orgdata_edges_from_graph(orgdata_graph, urad_zkratka == "MD ČR")
 orgdata_druhemini_nodes <- extract_orgdata_nodes_from_graph(orgdata_graph, urad_zkratka == "MD ČR")
 
-vn_jednomini <- visNetwork(orgdata_jednomini_nodes |>
-             mutate(value = child_ftes, color = dpth, title = nazev,
-                    analyticky = str_detect(tolower(nazev), "anal|koncep|evalu|progn|expert|výzk|hodno|monit"),
-                    color = recode(dpth, `1` = "blue", `2` = "purple", `3` = "orange", `4` = "red"),
-                    color = if_else(analyticky, "green", color),
-                    value = if_else(dpth == 1, 0, value)),
-           orgdata_jednomini_edges) |>
+vn_jednomini <- visNetwork(
+  orgdata_jednomini_nodes |>
+    mutate(value = child_ftes, color = dpth, title = nazev,
+           dpth = dpth - 1,
+           analyticky = str_detect(tolower(nazev), "anal|koncep|evalu|progn|expert|výzk|hodno|monit"),
+           color = recode(dpth, `1` = "blue", `2` = "purple", `3` = "orange", `4` = "red"),
+           color = if_else(analyticky, "firebrick", "darkgrey"),
+           size = if_else(analyticky, 50, value),
+           value = if_else(dpth == 1, 0, value)),
+  orgdata_jednomini_edges) |>
   visOptions(collapse = TRUE) %>%
   visEdges(arrows = "to", smooth = TRUE) %>%
   visEdges(arrows = "to", smooth = list(enabled = TRUE, type = "cubicBezier")) %>%
-  visLayout(hierarchical = TRUE, randomSeed = 1, improvedLayout = TRUE) |>
-  visHierarchicalLayout(sortMethod = "directed",
-                        direction = "LR",
-                        nodeSpacing = 100,
-                        parentCentralization = F,
-                        levelSeparation = 1500) |>
+  visNodes() |>
+  visIgraphLayout() |>
+  # visLayout(hierarchical = TRUE, randomSeed = 1, improvedLayout = TRUE) |>
+  # visHierarchicalLayout(sortMethod = "directed",
+  #                       direction = "LR",
+  #                       nodeSpacing = 100,
+  #                       parentCentralization = F,
+  #                       levelSeparation = 1500) |>
   visInteraction(zoomView = TRUE)
 
+vn_jednomini
+
 vn_druhemini <- visNetwork(orgdata_druhemini_nodes |>
-             mutate(value = child_ftes, color = dpth, title = nazev,
-                    analyticky = str_detect(tolower(nazev), "anal|koncep|evalu|progn|expert|výzk|hodno|monit"),
-                    color = recode(dpth, `1` = "blue", `2` = "purple", `3` = "orange", `4` = "red"),
-                    color = if_else(analyticky, "green", color),
-                    value = if_else(dpth == 1, 0, value)),
-           orgdata_druhemini_edges) |>
+                             mutate(value = child_ftes, color = dpth, title = nazev,
+                                    analyticky = str_detect(tolower(nazev), "anal|koncep|evalu|progn|expert|výzk|hodno|monit"),
+                                    color = recode(dpth, `1` = "blue", `2` = "purple", `3` = "orange", `4` = "red"),
+                                    color = if_else(analyticky, "green", color),
+                                    value = if_else(dpth == 1, 0, value)),
+                           orgdata_druhemini_edges) |>
   visOptions(collapse = TRUE) %>%
   visEdges(arrows = "to", smooth = TRUE) %>%
   visEdges(arrows = "to", smooth = list(enabled = TRUE, type = "cubicBezier")) %>%
@@ -241,12 +254,12 @@ vn_jednomini
 vn_druhemini
 
 vn_jednomini2 <- visNetwork(orgdata_jednomini_nodes |>
-             mutate(value = child_ftes, color = dpth, title = nazev,
-                    analyticky = str_detect(tolower(nazev), "anal|koncep|evalu|progn|expert|výzk|hodno|monit|strateg"),
-                    color = recode(dpth, `1` = "blue", `2` = "purple", `3` = "orange", `4` = "red", `5` = "darkred"),
-                    color = if_else(analyticky, "green", color),
-                    value = if_else(dpth == 1, 0, value)),
-           orgdata_jednomini_edges) |>
+                              mutate(value = child_ftes, color = dpth, title = nazev,
+                                     analyticky = str_detect(tolower(nazev), "anal|koncep|evalu|progn|expert|výzk|hodno|monit|strateg"),
+                                     color = recode(dpth, `1` = "blue", `2` = "purple", `3` = "orange", `4` = "red", `5` = "darkred"),
+                                     color = if_else(analyticky, "green", color),
+                                     value = if_else(dpth == 1, 0, value)),
+                            orgdata_jednomini_edges) |>
   visOptions(collapse = TRUE) %>%
   visNodes(color = list(border = "white", selected = list(border = "blue")),
            mass = 1.4,scaling = list(min = 15, max = 50)) |>
@@ -265,7 +278,7 @@ vn_jednomini2
 visNetwork::visSave(vn_jednomini, "vis_vn_jednomini.html", selfcontained = FALSE)
 visNetwork::visSave(vn_druhemini, "vis_vn_druhemini.html", selfcontained = FALSE)
 
-htmlwidgets::saveWidget(vn_jednomini, "vis_vn_jednomini.html", selfcontained = FALSE, libdir = "vis-libs")
+widget_saved <- htmlwidgets::saveWidget(vn_jednomini, "vis_vn_jednomini.html", selfcontained = FALSE, libdir = "vis-libs")
 htmlwidgets::saveWidget(vn_druhemini, "vis_vn_druhemini.html", selfcontained = FALSE, libdir = "vis-libs")
 htmlwidgets::saveWidget(vn_jednomini2, "vis_vn_jednomini2.html", selfcontained = FALSE, libdir = "vis-libs")
 
@@ -274,3 +287,13 @@ orgdata_graph |>
   mutate(x = tidygraph::bfs_after(nazev == "12012281"))
 
 visNetwork(orgdata_nodes_uv, orgdata_edges_uv)
+
+targets::tar_load(orgdata_graph)
+
+make_org_visnetwork(orgdata_graph, "MMR ČR", igraph_layout = "layout_with_fr")
+make_org_visnetwork(orgdata_graph, "MMR ČR", igraph_layout = "layout_with_kk")
+make_org_visnetwork(orgdata_graph, "GFŘ", igraph_layout = "layout_nicely")
+
+make_org_visnetwork(orgdata_graph, urad_zkr = "ÚP ČR")
+make_org_visnetwork(orgdata_graph, "ÚP ČR", igraph_layout = "layout_with_kk")
+make_org_visnetwork(orgdata_graph, "GFŘ", igraph_layout = "layout_with_kk")
