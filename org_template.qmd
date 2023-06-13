@@ -46,10 +46,12 @@ layout_code <- if_else(urad_zkr == "ÚP ČR", "layout_with_kk", "layout_nicely")
 ::: callout-note
 ### Legenda označení útvarů {#legenda-označení-útvarů}
 
-:::{.legend-box}
-[Analýzy a evaluace]{.lg .anal} [Hodnocení]{.lg .hodnoc} [Výzkum]{.lg .vyzk} [Monitoring]{.lg .monit} [Strategie, politiky, koncepce]{.lg .strat} [Statistika]{.lg .stat}  [Ostatní]{.lg} 
+::: legend-box
+[Analýzy a evaluace]{.lg .anal} [Hodnocení]{.lg .hodnoc}, dopad [Výzkum]{.lg .vyzk} [Monitoring]{.lg .monit} [Strategie, politiky, koncepce]{.lg .strat} [Statistika]{.lg .stat} [Ostatní]{.lg}
 :::
 :::
+
+Počet lidí zobrazený při najetí na bod útvaru zahrnuje lidi pracující přímo v útvaru a všech jeho podřízených útvarech.
 
 ```{r}
 make_org_visnetwork(orgdata_graph, urad_zkr, layout_code)

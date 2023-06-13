@@ -6,16 +6,17 @@ make_org_visnetwork <- function(graph, urad_zkr, igraph_layout) {
 
   vn_jednomini_base <- visNetwork(
     orgdata_mini_nodes |>
-      mutate(value = child_ftes,
+      mutate(nazev_show = paste0(nazev, "<br />", child_ftes, " osob"),
+             value = child_ftes,
              dpth = dpth - 1,
              color0 = dpth,
-             title = nazev,
+             title = nazev_show,
              label = nazev,
              analyticky = str_detect(tolower(nazev), "anal|koncep|evalu|progn|expert|výzk|hodnoc|monit"),
              color0 = color_palette[dpth],
              nazev_lower = tolower(nazev),
              color = case_when(str_detect(nazev_lower, "anal|eval") ~ "#8B008B",
-                               str_detect(nazev_lower, "hodnocen") ~ "#006400",
+                               str_detect(nazev_lower, "hodnocen|dopad") ~ "#006400",
                                str_detect(nazev_lower, "monitor") ~ "#EE7600",
                                str_detect(nazev_lower, "výzkum") ~ "#00008B",
                                str_detect(nazev_lower, "strateg|polit|koncep") ~ "#CD0000",
