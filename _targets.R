@@ -2,7 +2,7 @@ library(targets)
 library(tarchetypes)
 library(future)
 
-future::plan(multisession)
+# future::plan(multisession)
 
 # Config ------------------------------------------------------------------
 
@@ -179,9 +179,10 @@ t_orgchart <- list(
   tar_target(urady_tbl, extract_urady(orgdata_xml)),
   tar_target(orgdata_raw, extract_orgdata_raw(orgdata_xml, urady_tbl)),
 
-  tar_target(orgdata_nodes, extract_orgdata_nodes_from_raw(orgdata_raw)),
+  tar_target(orgdata_nodes_basic, extract_orgdata_nodes_from_raw(orgdata_raw)),
   tar_target(orgdata_edges, extract_orgdata_edges_from_raw(orgdata_raw)),
-  tar_target(orgdata_graph, build_orgdata_graph(orgdata_nodes, orgdata_edges)),
+  tar_target(orgdata_nodes, annotate_orgdata_nodes(orgdata_nodes_basic)),
+  tar_target(orgdata_graph, build_orgdata_graph(orgdata_nodes, orgdata_edges), format = "qs"),
 
   tar_target(orgdata_nodes_processed, extract_orgdata_nodes_from_graph(orgdata_graph)),
   tar_target(orgdata_edges_processed, extract_orgdata_edges_from_graph(orgdata_graph)),
@@ -252,35 +253,6 @@ t_export <- list(
 
 )
 
-# Generate org pages ------------------------------------------------------
-
-# for static branching below, we need these as objects, not dynamic targets
-# so reextract this
-# note: perhaps we can do this with dynamic branching instead?
-
-org_tbl <- extract_urady(c_orgchart_xml_local)
-org_ids <- make_org_ids(org_tbl)
-
-org_pages <- list(
-  tar_file(org_qmd_template, "org_template.qmd"),
-  # generate a page for each of ~200 orgs
-  tar_map(
-    values = tibble(org_id = unname(org_ids),
-                    org_nazev = names(org_ids)),
-    names = org_id,
-    tar_target(doc_org, render_org(org_qmd_template, org_id, org_nazev, "orgs",
-                                   # force deps that targets will not detect
-                                   # in org_template.qmd
-                                   orgdata_graph, orgdata_date, urady_tbl),
-               priority = .999, format = "file")),
-  # generate yaml file which will populate the listing on the index page
-  tar_file(org_listing_yaml, make_org_listing_yaml(urady_tbl, "orgs/org_listing.yaml"))
-
-)
-
-# Run ---------------------------------------------------------------------
-
 
 list(t_files, t_read_annual, t_read_eklep, t_compile_syst, t_export, t_orgchart,
-     t_jobs, org_pages,
-     t_meta, t_ciselniky)
+     t_jobs, t_meta, t_ciselniky)
