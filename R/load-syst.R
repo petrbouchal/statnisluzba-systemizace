@@ -38,7 +38,8 @@ load_syst <- function(path, yr, period, skip, nmax = Inf, sheet = 1) {
               pocet_celkem = pocet_predst + pocet_ostat,
               rok = as.integer(rok),
               date = as.Date(period),
-              kapitola_kod = if_else(kapitola_kod == "307*", "307", as.character(kapitola_kod)))
+              kapitola_kod = if_else(kapitola_kod == "307*", "307", as.character(kapitola_kod)),
+              kapitola_kod = if_else(kapitola_kod == "314**", "314", as.character(kapitola_kod)))
 
   return(x)
 
