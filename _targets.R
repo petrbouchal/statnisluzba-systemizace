@@ -100,7 +100,9 @@ t_read_annual <- list(
 
                 "data-input/tarify/Manual_Tarifni-tabulky-platne-v-r-2023.xls",
                 load_tarify(!!.x, 2023)),
-  tar_target(tarify, compile_tarify(tarify_2021, tarify_2022, tarify_2023))
+  tar_target(tarify_2024, tarify_2023 |> mutate(rok = 2024)),
+  tar_target(tarify, compile_tarify(tarify_2021, tarify_2022, tarify_2023,
+                                    tarify_2024))
 )
 
 
@@ -173,22 +175,22 @@ t_compile_syst <- list(
 
 # Orgchart ----------------------------------------------------------------
 
-t_orgchart <- list(
-  tar_download(orgdata_xml_fresh, c_orgchart_url, c_orgchart_xml_target),
-  tar_target(orgdata_xml, if(c_orgchart_use_local) c_orgchart_xml_local else orgdata_xml_fresh),
-  tar_target(urady_tbl, extract_urady(orgdata_xml)),
-  tar_target(orgdata_raw, extract_orgdata_raw(orgdata_xml, urady_tbl)),
-
-  tar_target(orgdata_nodes_basic, extract_orgdata_nodes_from_raw(orgdata_raw)),
-  tar_target(orgdata_edges, extract_orgdata_edges_from_raw(orgdata_raw)),
-  tar_target(orgdata_nodes, annotate_orgdata_nodes(orgdata_nodes_basic)),
-  tar_target(orgdata_graph, build_orgdata_graph(orgdata_nodes, orgdata_edges), format = "qs"),
-
-  tar_target(orgdata_nodes_processed, extract_orgdata_nodes_from_graph(orgdata_graph)),
-  tar_target(orgdata_edges_processed, extract_orgdata_edges_from_graph(orgdata_graph)),
-  tar_target(orgdata_rect, rectangularise_orgdata(orgdata_raw)),
-  tar_target(orgdata_date, get_orgdata_date(orgdata_xml))
-)
+# t_orgchart <- list(
+#   tar_download(orgdata_xml_fresh, c_orgchart_url, c_orgchart_xml_target),
+#   tar_target(orgdata_xml, if(c_orgchart_use_local) c_orgchart_xml_local else orgdata_xml_fresh),
+#   tar_target(urady_tbl, extract_urady(orgdata_xml)),
+#   tar_target(orgdata_raw, extract_orgdata_raw(orgdata_xml, urady_tbl)),
+#
+#   tar_target(orgdata_nodes_basic, extract_orgdata_nodes_from_raw(orgdata_raw)),
+#   tar_target(orgdata_edges, extract_orgdata_edges_from_raw(orgdata_raw)),
+#   tar_target(orgdata_nodes, annotate_orgdata_nodes(orgdata_nodes_basic)),
+#   tar_target(orgdata_graph, build_orgdata_graph(orgdata_nodes, orgdata_edges), format = "qs"),
+#
+#   tar_target(orgdata_nodes_processed, extract_orgdata_nodes_from_graph(orgdata_graph)),
+#   tar_target(orgdata_edges_processed, extract_orgdata_edges_from_graph(orgdata_graph)),
+#   tar_target(orgdata_rect, rectangularise_orgdata(orgdata_raw)),
+#   tar_target(orgdata_date, get_orgdata_date(orgdata_xml))
+# )
 
 job_files_xml <- list.files("~/cpers/statnisluzba-downloader/soubory-mista/", full.names = TRUE)
 
@@ -226,33 +228,33 @@ t_jobs <- list(
 # Export ------------------------------------------------------------------
 
 t_export <- list(
-  tar_file(export_all, write_data(syst_all, file.path(c_export_dir, "systemizace_all.csv"))),
-  tar_file(export_all_parquet, write_data(syst_all, file.path(c_export_dir, "systemizace_all.parquet"),
-                                          arrow::write_parquet)),
-  tar_file(export_long_parquet, write_data(syst_pocty_long,
-                                           file.path(c_export_dir, "systemizace_pocty_long.parquet"),
-                                           arrow::write_parquet)),
-  tar_file(export_long_excel, write_data(syst_pocty_long,
-                                         file.path(c_export_dir, "systemizace_pocty_long.xlsx"),
-                                         writexl::write_xlsx)),
-  tar_file(export_long_csv, write_data(syst_pocty_long |> select(-kapitola_nazev, -kapitola_typ,
-                                                                 -organizace_typ, -kapitola_zkr,
-                                                                 -kapitola_vladni, -level_nazev),
-                                       file.path(c_export_dir, "systemizace_pocty_long.csv"),
-                                       write_excel_csv2)),
-  tar_file(export_org_rect, write_data(orgdata_rect, file.path(c_export_dir, "struktura-hierarchie.csv"),
-                                       write_excel_csv2)),
-  tar_file(export_org_nodes, write_data(orgdata_nodes_processed,
-                                        file.path(c_export_dir, "struktura-nodes.csv"),
-                                        write_excel_csv2)),
-  tar_file(export_org_edges, write_data(orgdata_edges_processed,
-                                        file.path(c_export_dir, "struktura-edges.csv"),
-                                        write_excel_csv2)),
+  # tar_file(export_all, write_data(syst_all, file.path(c_export_dir, "systemizace_all.csv"))),
+  # tar_file(export_all_parquet, write_data(syst_all, file.path(c_export_dir, "systemizace_all.parquet"),
+  #                                         arrow::write_parquet)),
+  # tar_file(export_long_parquet, write_data(syst_pocty_long,
+  #                                          file.path(c_export_dir, "systemizace_pocty_long.parquet"),
+  #                                          arrow::write_parquet)),
+  # tar_file(export_long_excel, write_data(syst_pocty_long,
+  #                                        file.path(c_export_dir, "systemizace_pocty_long.xlsx"),
+  #                                        writexl::write_xlsx)),
+  # tar_file(export_long_csv, write_data(syst_pocty_long |> select(-kapitola_nazev, -kapitola_typ,
+  #                                                                -organizace_typ, -kapitola_zkr,
+  #                                                                -kapitola_vladni, -level_nazev),
+  #                                      file.path(c_export_dir, "systemizace_pocty_long.csv"),
+  #                                      write_excel_csv2)),
+  # tar_file(export_org_rect, write_data(orgdata_rect, file.path(c_export_dir, "struktura-hierarchie.csv"),
+  #                                      write_excel_csv2)),
+  # tar_file(export_org_nodes, write_data(orgdata_nodes_processed,
+  #                                       file.path(c_export_dir, "struktura-nodes.csv"),
+  #                                       write_excel_csv2)),
+  # tar_file(export_org_edges, write_data(orgdata_edges_processed,
+  #                                       file.path(c_export_dir, "struktura-edges.csv"),
+  #                                       write_excel_csv2)),
   tar_file(app_jobs, export_jobs_for_app(jobs_uniq_subbed)),
   tar_file(app_sims, export_sims_for_app(jobs_salary_sims_subbed))
 
 )
 
 
-list(t_files, t_read_annual, t_read_eklep, t_compile_syst, t_export, t_orgchart,
+list(t_files, t_read_annual, t_read_eklep, t_compile_syst, t_export,
      t_jobs, t_meta, t_ciselniky)

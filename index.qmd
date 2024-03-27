@@ -15,6 +15,7 @@ execute:
 ```
 
 ```{r}
+# load only to make sure this file registers in targets DAG
 targets::tar_load(cis_predstaveni)
 targets::tar_load(jobs_uniq_subbed)
 targets::tar_load(jobs_salary_sims_subbed)
