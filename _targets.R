@@ -228,20 +228,20 @@ t_jobs <- list(
 # Export ------------------------------------------------------------------
 
 t_export <- list(
-  # tar_file(export_all, write_data(syst_all, file.path(c_export_dir, "systemizace_all.csv"))),
-  # tar_file(export_all_parquet, write_data(syst_all, file.path(c_export_dir, "systemizace_all.parquet"),
-  #                                         arrow::write_parquet)),
-  # tar_file(export_long_parquet, write_data(syst_pocty_long,
-  #                                          file.path(c_export_dir, "systemizace_pocty_long.parquet"),
-  #                                          arrow::write_parquet)),
-  # tar_file(export_long_excel, write_data(syst_pocty_long,
-  #                                        file.path(c_export_dir, "systemizace_pocty_long.xlsx"),
-  #                                        writexl::write_xlsx)),
-  # tar_file(export_long_csv, write_data(syst_pocty_long |> select(-kapitola_nazev, -kapitola_typ,
-  #                                                                -organizace_typ, -kapitola_zkr,
-  #                                                                -kapitola_vladni, -level_nazev),
-  #                                      file.path(c_export_dir, "systemizace_pocty_long.csv"),
-  #                                      write_excel_csv2)),
+  tar_file(export_all, write_data(syst_all, file.path(c_export_dir, "systemizace_all.csv"))),
+  tar_file(export_all_parquet, write_data(syst_all, file.path(c_export_dir, "systemizace_all.parquet"),
+                                          arrow::write_parquet)),
+  tar_file(export_long_parquet, write_data(syst_pocty_long,
+                                           file.path(c_export_dir, "systemizace_pocty_long.parquet"),
+                                           arrow::write_parquet)),
+  tar_file(export_long_excel, write_data(syst_pocty_long,
+                                         file.path(c_export_dir, "systemizace_pocty_long.xlsx"),
+                                         writexl::write_xlsx)),
+  tar_file(export_long_csv, write_data(syst_pocty_long |> select(-kapitola_nazev, -kapitola_typ,
+                                                                 -organizace_typ, -kapitola_zkr,
+                                                                 -kapitola_vladni, -level_nazev),
+                                       file.path(c_export_dir, "systemizace_pocty_long.csv"),
+                                       write_excel_csv2)),
   # tar_file(export_org_rect, write_data(orgdata_rect, file.path(c_export_dir, "struktura-hierarchie.csv"),
   #                                      write_excel_csv2)),
   # tar_file(export_org_nodes, write_data(orgdata_nodes_processed,
@@ -250,7 +250,7 @@ t_export <- list(
   # tar_file(export_org_edges, write_data(orgdata_edges_processed,
   #                                       file.path(c_export_dir, "struktura-edges.csv"),
   #                                       write_excel_csv2)),
-  tar_file(app_jobs, export_jobs_for_app(jobs_uniq_subbed)),
+  # tar_file(app_jobs, export_jobs_for_app(jobs_uniq_subbed)),
   tar_file(app_sims, export_sims_for_app(jobs_salary_sims_subbed))
 
 )
