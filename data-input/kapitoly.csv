@@ -30,7 +30,7 @@ kapitola_kod,kapitola_zkr,kapitola_nazev,kapitola_vladni
 347,"KCP","Komise pro cenné papíry",FALSE
 348,"ČBÚ","Český báňský úřad",FALSE
 349,"ERÚ","Energetický regulační úřad",FALSE
-353,"ÚOHS","Úřad na ochranu hospodářské soutěže",FALSE
+353,"ÚOHS","Úřad pro ochranu hospodářské soutěže",FALSE
 355,"ÚSTR","Ústav pro studium totalitních režimů",FALSE
 358,"ÚS","Ústavní soud",FALSE
 361,"AVČR","Akademie věd",FALSE
@@ -40,6 +40,7 @@ kapitola_kod,kapitola_zkr,kapitola_nazev,kapitola_vladni
 376,"GIBS","Generální inspekce bezpečnostních sborů",FALSE
 377,"TAČR","Technologická agentura ČR",FALSE
 381,"NKÚ","Nejvyšší kontrolní úřad",FALSE
+364,"DIA","Digitální a informační agentura",FALSE
 371,"ÚDHPSH","Úřad pro dohled nad hospodařením politických stran a politických hnutí",FALSE
 373,"ÚPDI", "Úřad pro přístup k dopravní infrastruktuře",FALSE
 362,"NSA", "Národní sportovní agentura",FALSE
