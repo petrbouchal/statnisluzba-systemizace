@@ -1,17 +1,20 @@
 library(targets)
 library(tarchetypes)
-library(future)
+library(crew)
 
-# future::plan(multisession)
+tar_option_set(
+  controller = crew_controller_local(workers = 1)
+)
 
 # Config ------------------------------------------------------------------
+
+source("_targets_packages.R")
 
 options(conflicts.policy = list(warn = FALSE))
 conflicted::conflict_prefer("get", "base", quiet = TRUE)
 conflicted::conflict_prefer("merge", "base", quiet = TRUE)
 conflicted::conflict_prefer("filter", "dplyr", quiet = TRUE)
 conflicted::conflict_prefer("lag", "dplyr", quiet = TRUE)
-options(clustermq.scheduler = "LOCAL")
 
 cnf <- config::get()
 nms_orig <- names(cnf)
@@ -23,7 +26,7 @@ rm(nms_orig)
 # Set target-specific options such as packages.
 tar_option_set(packages = c("dplyr", "tidygraph", "statnipokladna", "here", "readxl", "xml2",
                             "janitor", "curl", "stringr", "config", "conflicted",
-                            "future", "tidyr","ragg", "magrittr", "tibble",
+                            "tidyr","ragg", "magrittr", "tibble",
                             "furrr", "ggraph", "purrr", "jsonlite", "glue",
                             "lubridate", "writexl", "readr", "ptrr",
                             "pointblank", "tarchetypes", "forcats", "ggplot2"),
@@ -38,9 +41,8 @@ options(crayon.enabled = TRUE,
         yaml.eval.expr = TRUE)
 
 
-for (file in list.files("R", full.names = TRUE)) source(file)
+tar_source()
 
-source("_targets_packages.R")
 
 syst_urls <- paste0(c_syst_base_url, "/",
                     stringr::str_replace(c_syst_files_online, "\\.", "-"),
@@ -101,8 +103,9 @@ t_read_annual <- list(
                 "data-input/tarify/Manual_Tarifni-tabulky-platne-v-r-2023.xls",
                 load_tarify(!!.x, 2023)),
   tar_target(tarify_2024, tarify_2023 |> mutate(rok = 2024)),
+  tar_target(tarify_2025, tarify_2023 |> mutate(rok = 2025)),
   tar_target(tarify, compile_tarify(tarify_2021, tarify_2022, tarify_2023,
-                                    tarify_2024))
+                                    tarify_2024, tarify_2025))
 )
 
 
@@ -251,7 +254,7 @@ t_export <- list(
   #                                       file.path(c_export_dir, "struktura-edges.csv"),
   #                                       write_excel_csv2)),
   # tar_file(app_jobs, export_jobs_for_app(jobs_uniq_subbed)),
-  tar_file(app_sims, export_sims_for_app(jobs_salary_sims_subbed))
+  tar_target(app_sims, export_sims_for_app(jobs_salary_sims_subbed))
 
 )
 
