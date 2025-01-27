@@ -24,12 +24,12 @@ names(cnf) <- names(nms_orig)
 rm(nms_orig)
 
 # Set target-specific options such as packages.
-tar_option_set(packages = c("dplyr", "tidygraph", "statnipokladna", "here", "readxl", "xml2",
+tar_option_set(packages = c("dplyr", "statnipokladna", "here", "readxl", "xml2",
                             "janitor", "curl", "stringr", "config", "conflicted",
                             "tidyr","ragg", "magrittr", "tibble",
-                            "furrr", "ggraph", "purrr", "jsonlite", "glue",
+                            "purrr", "jsonlite", "glue",
                             "lubridate", "writexl", "readr", "ptrr",
-                            "pointblank", "tarchetypes", "forcats", "ggplot2"),
+                            "pointblank", "tarchetypes", "forcats"),
                # debug = "compiled_macro_sum_quarterly",
                # imports = c("purrrow"),
 )
@@ -59,16 +59,6 @@ t_files <- list(
              pattern = map(t_syst_urls, t_syst_files), format = "file")
 )
 
-
-## Metadata ----------------------------------------------------------------
-
-t_meta <- list(
-  tar_download(ovm_json,
-               "https://rpp-opendata.egon.gov.cz/odrpp/datovasada/ovm.json",
-               "data-input/ovm.json"),
-  tar_target(ovm, load_ovm(ovm_json))
-)
-
 ## Annual systemizace ------------------------------------------------------
 
 t_read_annual <- list(
@@ -80,33 +70,6 @@ t_read_annual <- list(
   tar_target(syst_prac, load_syst(syst_xlsx, syst_years, syst_periods, syst_rows_skip, sheet = 2),
              pattern = map(syst_xlsx, syst_years, syst_periods, syst_rows_skip)),
   tar_file_read(kapitoly, "data-input/kapitoly.csv", read_csv(!!.x, col_types = "cccl")),
-
-
-## Tarify ------------------------------------------------------------------
-
-  tar_file_read(tarify_2021,
-                # https://www.mfcr.cz/cs/o-ministerstvu/informacni-systemy/is-o-platech/
-                # https://www.mfcr.cz/assets/cs/media/Is-o-platech_2021-05-21_Tarifni-tabulky-platne-v-r-2021.xls
-
-                "data-input/tarify/Is-o-platech_2021-05-21_Tarifni-tabulky-platne-v-r-2021.xls",
-                load_tarify(!!.x, 2021)),
-  tar_file_read(tarify_2022,
-                # https://www.mfcr.cz/cs/o-ministerstvu/informacni-systemy/is-o-platech/
-                # https://www.mfcr.cz/assets/cs/media/2022-11-24_Tarifni-tabulky-platne-v-roce-2022.xls
-
-                "data-input/tarify/Is-o-platech_2021-05-21_Tarifni-tabulky-platne-v-r-2021.xls",
-                load_tarify(!!.x, 2022)),
-  tar_file_read(tarify_2023,
-                # doplněno ručně z https://www.zakonyprolidi.cz/cs/2014-304#prilohy
-                # editován pouze relevantní list
-
-                "data-input/tarify/Manual_Tarifni-tabulky-platne-v-r-2023.xls",
-                load_tarify(!!.x, 2023)),
-  tar_target(tarify_2024, tarify_2023 |> mutate(rok = 2024)),
-  tar_target(tarify_2025, tarify_2023 |> mutate(rok = 2025)),
-  tar_target(tarify, compile_tarify(tarify_2021, tarify_2022, tarify_2023,
-                                    tarify_2024, tarify_2025))
-)
 
 
 ## Systemizace eklep -------------------------------------------------------
@@ -135,35 +98,8 @@ t_read_eklep <- list(
              pattern = map(syst_eklep_files, syst_eklep_years,
                            syst_eklep_periods, syst_rows_skip_eklep_sluz,
                            syst_rows_nmax_eklep_sluz))
+  )
 )
-
-
-## Číselníky ISoSS ---------------------------------------------------------
-
-t_ciselniky <- list(
-  tar_download(cis_sluz_urady_csv,
-               "https://portal.isoss.gov.cz/ciselniky/ISoSS_TOC_SLURA.csv",
-               file.path("data-input", "cis_sluz_urady.csv")),
-  tar_target(cis_sluz_urady, read_csv(cis_sluz_urady_csv,
-                                      col_types = "cDDccD",
-                                      col_names = c("urad_id", "od", "do",
-                                                    "urad_nazev", "zkr", "updated"))),
-  tar_download(cis_predstaveni_csv,
-               "https://portal.isoss.gov.cz/ciselniky/ISoSS_TOC_SLOPR.csv",
-               file.path("data-input", "cis_predst.csv")),
-  tar_target(cis_predstaveni, read_csv(cis_predstaveni_csv,
-                                      col_types = "cDDccD",
-                                      col_names = c("predstaveny", "od", "do",
-                                                    "predstaveny_nazev", "zkr", "updated"))),
-  tar_download(cis_obory_csv,
-               "https://portal.isoss.gov.cz/ciselniky/ISoSS_TOC_OBSLU.csv",
-               file.path("data-input", "cis_obory.csv")),
-  tar_target(cis_obory, read_csv(cis_obory_csv,
-                                      col_types = "cDDccD",
-                                      col_names = c("obor_sluzby", "od", "do",
-                                                    "obor_nazev", "zkr", "updated")))
-)
-
 
 # Systemizace compilation -------------------------------------------------
 
@@ -174,59 +110,6 @@ t_compile_syst <- list(
                                  syst_eklep  |> mutate(src = "eklep"))),
   tar_target(syst_pocty_long, lengthen_data(syst_all))
 )
-
-
-# Orgchart ----------------------------------------------------------------
-
-# t_orgchart <- list(
-#   tar_download(orgdata_xml_fresh, c_orgchart_url, c_orgchart_xml_target),
-#   tar_target(orgdata_xml, if(c_orgchart_use_local) c_orgchart_xml_local else orgdata_xml_fresh),
-#   tar_target(urady_tbl, extract_urady(orgdata_xml)),
-#   tar_target(orgdata_raw, extract_orgdata_raw(orgdata_xml, urady_tbl)),
-#
-#   tar_target(orgdata_nodes_basic, extract_orgdata_nodes_from_raw(orgdata_raw)),
-#   tar_target(orgdata_edges, extract_orgdata_edges_from_raw(orgdata_raw)),
-#   tar_target(orgdata_nodes, annotate_orgdata_nodes(orgdata_nodes_basic)),
-#   tar_target(orgdata_graph, build_orgdata_graph(orgdata_nodes, orgdata_edges), format = "qs"),
-#
-#   tar_target(orgdata_nodes_processed, extract_orgdata_nodes_from_graph(orgdata_graph)),
-#   tar_target(orgdata_edges_processed, extract_orgdata_edges_from_graph(orgdata_graph)),
-#   tar_target(orgdata_rect, rectangularise_orgdata(orgdata_raw)),
-#   tar_target(orgdata_date, get_orgdata_date(orgdata_xml))
-# )
-
-job_files_xml <- list.files("~/cpers/statnisluzba-downloader/soubory-mista/", full.names = TRUE)
-
-
-# Jobs --------------------------------------------------------------------
-
-
-## Načíst ------------------------------------------------------------------
-
-t_jobs <- list(
-  tar_files_input(job_files, job_files_xml),
-  tar_target(jobs_raw, parse_job_list(job_files), pattern = map(job_files),
-             packages = c("dplyr", "xml2", "janitor", "stringr",
-                            "future", "tidyr", "purrr",
-                            "lubridate", "forcats")),
-  tar_file_read(ustredni_nemini, "data-input/urady-ustredni-nemini.csv",
-                read_csv(!!.x)),
-  tar_file_read(priplatky_vedeni, "data-input/priplatky-vedeni.csv",
-                read_csv(!!.x, col_types = "cddddddddd")),
-  tar_target(urady_roztridene, label_urady(cis_sluz_urady, ustredni_nemini)),
-  tar_target(jobs, process_jobs(jobs_raw, urady_roztridene, cis_predstaveni)),
-  tar_target(jobs_uniq, dedupe_jobs(jobs)),
-
-
-## Simulace ----------------------------------------------------------------
-
-  # tar_target(name)
-  tar_target(jobs_salary_sims, simulate_salaries(jobs_uniq, tarify, priplatky_vedeni)),
-  tar_target(jobs_uniq_subbed, sub_jobs_for_app(jobs_uniq)),
-  tar_target(jobs_salary_sims_subbed, sub_sims_for_app(jobs_salary_sims))
-
-)
-
 
 # Export ------------------------------------------------------------------
 
@@ -244,20 +127,10 @@ t_export <- list(
                                                                  -organizace_typ, -kapitola_zkr,
                                                                  -kapitola_vladni, -level_nazev),
                                        file.path(c_export_dir, "systemizace_pocty_long.csv"),
-                                       write_excel_csv2)),
-  # tar_file(export_org_rect, write_data(orgdata_rect, file.path(c_export_dir, "struktura-hierarchie.csv"),
-  #                                      write_excel_csv2)),
-  # tar_file(export_org_nodes, write_data(orgdata_nodes_processed,
-  #                                       file.path(c_export_dir, "struktura-nodes.csv"),
-  #                                       write_excel_csv2)),
-  # tar_file(export_org_edges, write_data(orgdata_edges_processed,
-  #                                       file.path(c_export_dir, "struktura-edges.csv"),
-  #                                       write_excel_csv2)),
-  # tar_file(app_jobs, export_jobs_for_app(jobs_uniq_subbed)),
-  tar_target(app_sims, export_sims_for_app(jobs_salary_sims_subbed))
-
+                                       write_excel_csv2))
 )
 
 
-list(t_files, t_read_annual, t_read_eklep, t_compile_syst, t_export,
-     t_jobs, t_meta, t_ciselniky)
+list(t_files, t_read_annual,
+     # t_read_eklep,
+     t_compile_syst, t_export)
