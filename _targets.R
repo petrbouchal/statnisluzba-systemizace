@@ -46,7 +46,8 @@ tar_source()
 
 syst_urls <- paste0(c_syst_base_url, "/",
                     stringr::str_replace(c_syst_files_online, "\\.", "-"),
-                    ".aspx")
+                    ".aspx") |> 
+  c(c_syst_urls_online)
 syst_files <- file.path(c_syst_dir, paste0("syst_", c_syst_years, ".xlsx"))
 
 
